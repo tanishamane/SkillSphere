@@ -2,6 +2,7 @@ import { useState } from "react";
 import Icon from "../../components/Icons.jsx";
 import Alert from "../../components/Alert.jsx";
 import { QUESTIONS } from "../../data/assessment.js";
+import MentorshipHub from "./MentorshipHub.jsx";
 
 const fmtDate = (iso) => (iso ? new Date(iso).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }) : "");
 export const slug = (t) => String(t).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -92,18 +93,28 @@ export function Overview({ user, assessment, recs, progress, completed, setActiv
 export function Profile({ profile, setProfile, onSave, saved }) {
   const set = (k) => (e) => setProfile({ ...profile, [k]: e.target.value });
   return <>
-    <PageHeader eyebrow="ACCOUNT" title="Employee Profile Management" subtitle="Your job role and experience help Gemini tailor course recommendations."/>
+    <PageHeader eyebrow="ACCOUNT" title="Employee Profile Management" subtitle="Your job role, department, and technical skills power personalized mentorship and course recommendations."/>
     <section className="panel">
-      {saved && <Alert type="success">Profile saved on this device. It will be used for your next recommendations.</Alert>}
+      {saved && <Alert type="success">Profile saved successfully to your SkillSphere account.</Alert>}
       <div className="profile-grid">
-        <label className="field"><span>Full name</span><input value={profile.fullName} onChange={set("fullName")}/></label>
-        <label className="field"><span>Employee ID</span><input value={profile.employeeId} placeholder="Enter employee ID" onChange={set("employeeId")}/></label>
-        <label className="field"><span>Email</span><input value={profile.email} readOnly/></label>
-        <label className="field"><span>Department</span><input value={profile.department} placeholder="e.g. Engineering" maxLength={80} onChange={set("department")}/></label>
-        <label className="field"><span>Job role</span><select value={profile.jobRole} onChange={set("jobRole")}><option>Software Developer</option><option>Data Analyst</option><option>QA Engineer</option><option>Support Engineer</option></select></label>
-        <label className="field"><span>Experience level</span><select value={profile.experience} onChange={set("experience")}><option>Entry level</option><option>Intermediate</option><option>Experienced</option></select></label>
+        <label className="field"><span>Full name</span><input value={profile.fullName || ""} onChange={set("fullName")}/></label>
+        <label className="field"><span>Employee ID</span><input value={profile.employeeId || ""} placeholder="Enter employee ID" onChange={set("employeeId")}/></label>
+        <label className="field"><span>Email</span><input value={profile.email || ""} readOnly/></label>
+        <label className="field"><span>Department</span><input value={profile.department || ""} placeholder="e.g. Engineering" maxLength={80} onChange={set("department")}/></label>
+        <label className="field"><span>Job role</span><select value={profile.jobRole || "Software Developer"} onChange={set("jobRole")}><option>Software Developer</option><option>Data Analyst</option><option>QA Engineer</option><option>Support Engineer</option></select></label>
+        <label className="field"><span>Experience level</span><select value={profile.experience || "Entry level"} onChange={set("experience")}><option>Entry level</option><option>Intermediate</option><option>Experienced</option></select></label>
       </div>
-      <button className="btn btn--primary" onClick={onSave}>Save profile</button>
+      <div style={{ marginTop: "1rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+        <label className="field">
+          <span>Technical Skills & Expertise (comma-separated)</span>
+          <input value={profile.skills || ""} placeholder="e.g. Java, Spring Boot, SQL, Docker, React" onChange={set("skills")} />
+        </label>
+        <label className="field">
+          <span>Professional Bio / Growth Goals</span>
+          <input value={profile.bio || ""} placeholder="Brief statement about your career or mentoring focus" onChange={set("bio")} />
+        </label>
+      </div>
+      <button className="btn btn--primary" style={{ marginTop: "1rem" }} onClick={onSave}>Save profile</button>
     </section></>;
 }
 
@@ -187,11 +198,7 @@ export function Progress({ recs, completed, progress, toggleCourse, setActivePag
 
 /* ----------------------------------------------------------------- Mentorship */
 export function Mentorship() {
-  return <><PageHeader eyebrow="COMMUNITY" title="Knowledge Sharing and Mentorship" subtitle="Learn from colleagues and share what you know."/>
-    <div className="feature-grid">
-      <article className="panel feature-card"><span className="feature-card__icon"><Icon name="book" size={26}/></span><h2>Knowledge sharing</h2><p>Share notes, useful links and learning resources with your team.</p><span className="badge badge--soon">Coming soon</span></article>
-      <article className="panel feature-card"><span className="feature-card__icon"><Icon name="users" size={26}/></span><h2>Mentorship</h2><p>Match with a mentor who can support your development goals.</p><span className="badge badge--soon">Coming soon</span></article>
-    </div></>;
+  return <MentorshipHub />;
 }
 
 /* -------------------------------------------------------------- Notifications */

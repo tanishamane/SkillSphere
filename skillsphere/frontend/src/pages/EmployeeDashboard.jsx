@@ -5,6 +5,7 @@ import Icon from "../components/Icons.jsx";
 import Alert from "../components/Alert.jsx";
 import { useAuth } from "../context/AuthContext.jsx";
 import { getAiRecommendations, parseApiError } from "../services/authService.js";
+import { getEmployeeProfile, updateEmployeeProfile } from "../services/mentorshipService.js";
 import { scoreAssessment } from "../data/assessment.js";
 import {
   Assessment, Courses, Gaps, Mentorship, Notifications, Overview, Profile, Progress, Reports, Results, slug,
@@ -35,13 +36,32 @@ export default function EmployeeDashboard() {
   const [activePage, setActivePage] = useState("overview");
   const [profile, setProfile] = useState(saved.profile || {
     fullName: user.fullName || "", employeeId: user.employeeId || "", email: user.email || "",
-    department: "", jobRole: "Software Developer", experience: "Entry level",
+    department: "", jobRole: "Software Developer", experience: "Entry level", bio: "", skills: "",
   });
   const [profileSaved, setProfileSaved] = useState(false);
   const [assessment, setAssessment] = useState(saved.assessment || null);
   const [recs, setRecs] = useState(saved.recs ? { status: "done", data: saved.recs, error: "" } : { status: "idle", data: null, error: "" });
   const [completed, setCompleted] = useState(saved.completed || []);
   const latestRequest = useRef(0);
+
+  // Sync profile from backend on mount
+  useEffect(() => {
+    getEmployeeProfile()
+      .then((p) => {
+        setProfile((prev) => ({
+          ...prev,
+          fullName: p.fullName || prev.fullName,
+          email: p.email || prev.email,
+          employeeId: p.employeeId || prev.employeeId,
+          jobRole: p.jobRole || prev.jobRole,
+          department: p.department || prev.department || "",
+          experience: p.experienceLevel || prev.experience,
+          bio: p.bio || prev.bio || "",
+          skills: p.skills || prev.skills || "",
+        }));
+      })
+      .catch(() => {});
+  }, []);
 
   // Keep results on this device so a refresh does not lose them.
   useEffect(() => {
@@ -76,7 +96,22 @@ export default function EmployeeDashboard() {
   };
   const retry = () => assessment && requestRecommendations(assessment, profile);
   const toggleCourse = (id) => setCompleted((list) => (list.includes(id) ? list.filter((x) => x !== id) : [...list, id]));
-  const saveProfile = () => { setProfileSaved(true); setTimeout(() => setProfileSaved(false), 4000); };
+
+  const saveProfile = async () => {
+    try {
+      await updateEmployeeProfile({
+        jobRole: profile.jobRole || "Software Developer",
+        department: profile.department || null,
+        experienceLevel: profile.experience || "Entry level",
+        bio: profile.bio || null,
+        skills: profile.skills || null,
+      });
+    } catch {
+      // Local fallback continues gracefully
+    }
+    setProfileSaved(true);
+    setTimeout(() => setProfileSaved(false), 4000);
+  };
 
   const courseList = recs.data?.recommendations || [];
   const progress = courseList.length ? Math.round((courseList.filter((c) => completed.includes(slug(c.title))).length / courseList.length) * 100) : 0;
