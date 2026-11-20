@@ -1,162 +1,148 @@
-# SkillSphere — Role-Based Authentication and Employee Dashboard
+# SkillSphere — Organizational Knowledge Gap Intelligence Platform
 
-Organizational Knowledge Gap Intelligence Platform · React + Java Spring Boot + PostgreSQL
+[![Java](https://img.shields.io/badge/Java-21_LTS-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18.4-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tests](https://img.shields.io/badge/Tests-404%20Passing-brightgreen?style=for-the-badge&logo=junit5&logoColor=white)]()
+[![Status](https://img.shields.io/badge/Status-100%25%20Production%20Ready-success?style=for-the-badge)]()
 
-The Employee workspace includes a profile page, a 12-question skills assessment, a knowledge-gap summary, **AI course recommendations powered by Google Gemini**, learning progress tracking, notifications and printable reports. Assessment results and progress are stored in the browser (localStorage) per user; they are not yet persisted to PostgreSQL. The authentication, registration, session, role checks, and admin user-management APIs remain backed by Spring Boot/PostgreSQL.
+**SkillSphere** is an enterprise-grade Organizational Knowledge Gap Intelligence Platform developed under the **Infosys Springboard Virtual Internship 7.0**. The platform dynamically identifies workforce competency deficits, computes empirical skill gaps against job-role benchmarks, visualizes multi-tier competency heatmaps, and provides AI-guided learning pathways alongside structured 1-on-1 expert mentorship.
 
-| Layer | Technology |
-|-------|------------|
-| Frontend | React 18 + Vite, CSS3, React Router, Axios |
-| Backend | Java 17, Spring Boot 3.3, Spring Security, Spring Data JPA, Bean Validation |
-| Database | PostgreSQL 14+ (schema managed by Flyway) |
-| Auth | Server-side session in an **HttpOnly** cookie + CSRF double-submit cookie, BCrypt (cost 12) |
+---
 
-No Node.js backend is used — Node only runs the Vite dev tools.
+## 1. Core Architectural Highlights
+
+- **Dynamic Skill Gap Derivation:** Real-time server-side calculation ($\max(0, \text{Required} - \text{Current})$) backed by PostgreSQL transactional persistence.
+- **Six Specialized Role Workspaces:** Dedicated dashboards for `EMPLOYEE`, `MANAGER`, `MENTOR`, `HR_SPECIALIST`, `DEPARTMENT_HEAD`, and `ADMIN`.
+- **Enterprise Security:** Stateful session management (`JSESSIONID`, HttpOnly, SameSite=Lax), BCrypt-12 password hashing, double-submit CSRF protection (`X-XSRF-TOKEN`), and strict method-level `@PreAuthorize` authorization (96/96 passing RBAC matrix assertions).
+- **Google Gemini Generative AI:** Intelligent course recommendations and assessment authoring, backed by a deterministic database fallback.
+- **Relational Integrity:** 57 PostgreSQL tables governed by 11 Flyway migrations under strict Hibernate schema validation (`ddl-auto: validate`).
+- **Disaster Recovery:** Native PostgreSQL backup orchestrator (`pg_dump`) paired with non-destructive isolated sandbox restore verification (`pg_restore`).
+
+---
+
+## 2. Platform Technology Stack
+
+| Layer | Framework / Technology | Version & Details |
+|:---|:---|:---|
+| **Backend Runtime** | Java Development Kit (LTS) | OpenJDK 21.0.6 (64-Bit Server VM) |
+| **Backend Framework** | Spring Boot | 3.3.5 (Web, Data JPA, Security, Validation) |
+| **Security Engine** | Spring Security | 6.3.4 (Method-level RBAC, CSRF token, Session) |
+| **Database Engine** | Native PostgreSQL | 18.4 (Port 5432, 57 tables, 103 FKs, 126 indexes) |
+| **Schema Governance**| Flyway Core | 10.10.0 (Sequential migrations V1–V11) |
+| **ORM / Dialect** | Hibernate ORM | 6.5.3.Final (`hibernate.ddl-auto: validate`) |
+| **Frontend Framework**| React | 18.3.1 (Single Page Application architecture) |
+| **Frontend Build Tool**| Vite | 5.4.21 (Production build in 2.52s, 0 errors) |
+| **Styling & UI** | Tailwind CSS + Custom CSS3 | Modern enterprise glassmorphic design system |
+| **AI Integration** | Google Gemini API | `gemini-3.5-flash` model with rule fallback |
+| **Automated Tests** | JUnit 5 / Mockito / AssertJ | **404 / 404 tests passing** (100.0%) |
+
+---
+
+## 3. Repository Structure
 
 ```
 skillsphere/
-├── backend/            Spring Boot project (pom.xml, src/main/java/com/skillsphere/...)
-│   └── src/main/resources/db/migration/   V1 users, V2 password_reset_tokens
-├── frontend/           React + Vite project
-├── database/schema.sql Reference SQL (Flyway applies the same schema automatically)
-├── postman/            Importable Postman collection
-├── docker-compose.yml  Optional local PostgreSQL
-└── README.md
+├── backend/                             # Java 21 / Spring Boot 3.3.5 service
+│   ├── pom.xml                          # Maven build dependencies & test plugins
+│   ├── .env.example                     # Backend environment configuration template
+│   └── src/
+│       ├── main/java/com/skillsphere/   # 23 Controllers, Services, Entities, DTOs
+│       ├── main/resources/db/migration/ # Flyway SQL migrations V1 through V11
+│       └── test/java/com/skillsphere/   # 404 Automated unit & integration tests
+├── frontend/                            # React 18 / Vite 5 SPA
+│   ├── package.json                     # Node dependencies & Vite build scripts
+│   ├── .env.example                     # Client environment configuration template
+│   └── src/
+│       ├── components/                  # Shared UI components (Layout, Table, KPI)
+│       ├── pages/                       # 6 Role Dashboards & 76 unique subviews
+│       ├── services/                    # Axios REST client with CSRF interceptors
+│       └── styles/                      # Tailwind & custom glassmorphic stylesheets
+├── docs/                                # Authoritative platform documentation
+│   ├── README.md                        # Master documentation index
+│   ├── PROJECT_REPORT.md                # Complete 21-section technical project report
+│   ├── ARCHITECTURE.md                  # System architecture & sequence diagrams
+│   ├── DATABASE.md                      # 57 tables, constraints, 126 indexes & ER diagram
+│   ├── API_DOCUMENTATION.md             # 291 REST API endpoints & DTO specifications
+│   ├── TESTING_REPORT.md                # Consolidated testing report (Phases 1–6)
+│   ├── USER_MANUAL.md                   # Operational manual for all six roles
+│   ├── INSTALLATION_GUIDE.md            # Windows setup guide (Java, Node, PostgreSQL)
+│   ├── DEPLOYMENT_GUIDE.md              # Production deployment & cloud hosting assessment
+│   ├── MAINTENANCE_AND_BACKUP_GUIDE.md  # Operations, backup & isolated sandbox restore
+│   └── DATA_INVENTORY.md                # Audit of test data vs project baseline data
+├── .env.example                         # Root configuration template
+└── README.md                            # Main project overview (this file)
 ```
 
-## 1. Prerequisites
+---
 
-- JDK 17+ and Maven 3.9+ (or open `backend/` in IntelliJ / Eclipse / VS Code)
-- Node.js 18+ (for the React dev server only)
-- PostgreSQL 14+ (or Docker)
+## 4. Quickstart Guide (Local Windows Setup)
 
-## 2. Database
+### Prerequisites
+- **Java 21 LTS** (`java -version`)
+- **Apache Maven 3.9+** (`mvn -version`)
+- **Node.js 20+ & npm 10+** (`node -v`, `npm -v`)
+- **PostgreSQL 18.4** (`psql --version`) running on `localhost:5432`
 
-Create the database once (the tables are created by Flyway on first start):
-
-```bash
-psql -U postgres -c "CREATE DATABASE skillsphere_db;"
+### 1. Database Creation
+```powershell
+psql -U postgres -h 127.0.0.1 -p 5432 -c "CREATE DATABASE skillsphere_db;"
 ```
+*(Flyway automatically creates all 57 tables and seeds baseline data on first startup).*
 
-Or with Docker:
-
-```bash
-export POSTGRES_PASSWORD=choose_a_password     # PowerShell: $env:POSTGRES_PASSWORD="choose_a_password"
-docker compose up -d
-```
-
-## 3. Backend (port 8080)
-
-```bash
+### 2. Backend Startup
+```powershell
 cd backend
-cp .env.example .env          # Windows: copy .env.example .env
-# edit .env: set DB_PASSWORD (and ADMIN_EMAIL / ADMIN_PASSWORD for your first admin)
+copy .env.example .env
+# Edit .env: Set DB_PASSWORD to your PostgreSQL password
 mvn spring-boot:run
 ```
+*(Backend launches on `http://localhost:8080`).*
 
-`.env` is read automatically from the `backend/` folder (spring-dotenv). You can also set the same names
-as real environment variables. **Nothing secret is committed** — `.env` is git-ignored.
-
-| Variable | Purpose |
-|----------|---------|
-| `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` | PostgreSQL connection (`DB_PASSWORD` is required) |
-| `CORS_ALLOWED_ORIGINS` | Origins allowed to call the API (default `http://localhost:5173`) |
-| `FRONTEND_URL` | Used to build password-reset links |
-| `COOKIE_SECURE` | Set `true` behind HTTPS |
-| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | Optional: creates the first Admin if none exists |
-| `LOG_RESET_LINKS` | Dev only: print reset links in the backend console |
-| `GEMINI_API_KEY` | Google Gemini key for AI course recommendations (get one at <https://aistudio.google.com/apikey>). Stays on the server. |
-| `GEMINI_MODEL` | Optional, default `gemini-3.5-flash`. Change it if Google retires the model. |
-
-## 4. Frontend (port 5173)
-
-```bash
+### 3. Frontend Startup
+```powershell
 cd frontend
 npm install
 npm run dev
 ```
+*(Client launches on `http://localhost:5173`).*
 
-Open <http://localhost:5173>. If the API is not on `http://localhost:8080`, copy `frontend/.env.example`
-to `frontend/.env` and change `VITE_API_BASE_URL`.
+---
 
-## 5. How the security works
+## 5. Demonstration Accounts
 
-- **Roles:** public registration always creates an **Employee**. The role dropdown is recorded as a *request*
-  (`requested_role`) for an administrator; it never grants access. Admins change roles/status at
-  `PATCH /api/admin/users/{id}/role|status` (enforced with `hasRole('ADMIN')`). The very first Admin comes from
-  `ADMIN_EMAIL` / `ADMIN_PASSWORD` at startup.
-- **Sessions:** `JSESSIONID` is HttpOnly + SameSite=Lax; nothing sensitive is in localStorage. "Remember me" keeps the
-  session for 7 days (persistent cookie); otherwise 30 min idle timeout. A new session id is issued at login.
-- **CSRF:** the API issues an `XSRF-TOKEN` cookie via `GET /api/auth/csrf`; the React app echoes it in `X-XSRF-TOKEN`.
-- **Authorization:** every dashboard endpoint is protected server-side (`@PreAuthorize`); the React route guards are
-  only for UX.
-- **Brute force:** 5 failed logins per email lock sign-in for 15 minutes (in-memory; use Redis for multiple nodes).
-- **Password reset:** random 256-bit token, only its SHA-256 hash is stored, expires in 30 min, single use; the
-  response never reveals whether an email exists. No mail server is configured, so in development the link is
-  **printed in the backend console** — plug a real `EmailService` implementation in for production.
-- **Validation:** all input is validated again on the backend (Bean Validation) and unique constraints back up the
-  duplicate checks.
+The platform includes pre-seeded demonstration accounts for all six organizational roles:
 
-## 6. Employee workspace notes
+| Role Identity | Email Address | Password | Landing Route |
+|:---|:---|:---:|:---|
+| **EMPLOYEE** | `test.employee.a.0badfa9e@skillsphere.com` | `Password123!` | `/dashboard/employee` |
+| **MANAGER** | `manager@example.com` | `ChangeMe!2024` | `/dashboard/manager` |
+| **MENTOR** | `mentor@example.com` | `ChangeMe!2024` | `/dashboard/mentor` |
+| **HR_SPECIALIST** | `hr@gmail.com` | `Password123!` | `/dashboard/hr` |
+| **DEPARTMENT_HEAD**| `head@gmail.com` | `Password123!` | `/dashboard/department-head` |
+| **ADMIN** | `admin@example.com` | `ChangeMe!2024` | `/dashboard/admin` |
 
-- Registration contains a **User role** dropdown: Employee, HR, Manager, and Admin.
-- For security, public registration always creates an Employee account. Choosing HR, Manager, or Admin records an access request for administrator approval; it does not immediately grant those privileges.
-- After registration, sign in. The backend role returned at login determines which dashboard opens. Employee accounts open the Employee workspace.
-- **AI recommendations:** after the employee submits the assessment, the React app sends the per-skill results plus job role/experience to `POST /api/ai/recommendations`. The Spring Boot backend calls the Gemini API (key from `GEMINI_API_KEY`, never exposed to the browser) and returns 3-5 courses with priority, reasons and topics. If the key is missing or Gemini is unreachable, a rule-based fallback is returned and the UI labels it "Standard recommendations".
-- Course links open a web search for the recommended course; Gemini is told not to invent URLs.
+---
 
-## 7. API
+## 6. Complete Documentation Suite
 
-| Method | Path | Auth | Notes |
-|--------|------|------|-------|
-| GET | `/api/auth/csrf` | public | sets XSRF-TOKEN cookie |
-| POST | `/api/auth/register` | public | 201, always Employee |
-| POST | `/api/auth/login` | public | 200 user JSON + session cookie |
-| POST | `/api/auth/logout` | session | 200 |
-| GET | `/api/auth/me` | session | current user |
-| POST | `/api/auth/forgot-password` | public | always 200 |
-| POST | `/api/auth/reset-password` | public | `{token,password,confirmPassword}` |
-| GET | `/api/dashboard/{employee\|hr\|manager\|admin}` | role | 403 for other roles (Admin may view all) |
-| POST | `/api/ai/recommendations` | Employee/Admin | Gemini course recommendations from assessment results |
-| GET | `/api/admin/users` | Admin | list users |
-| PATCH | `/api/admin/users/{id}/role` | Admin | `{ "role": "HR" }` |
-| PATCH | `/api/admin/users/{id}/status` | Admin | `{ "status": "SUSPENDED" }` |
+For detailed technical, architectural, and operational specifications, refer to the documents in the [`docs/`](file:///c:/Users/gjaya/OneDrive/Desktop/SkillSphere/skillsphere/docs) directory:
+- 📖 [Project Report](docs/PROJECT_REPORT.md)
+- 🏗️ [Architecture Specification](docs/ARCHITECTURE.md)
+- 🗄️ [Database Schema & ER Diagram](docs/DATABASE.md)
+- 🔌 [REST API Documentation](docs/API_DOCUMENTATION.md)
+- 🧪 [Consolidated Testing Report](docs/TESTING_REPORT.md)
+- 👥 [Six-Role User Manual](docs/USER_MANUAL.md)
+- 💻 [Installation Guide](docs/INSTALLATION_GUIDE.md)
+- 🚀 [Production Deployment Guide](docs/DEPLOYMENT_GUIDE.md)
+- 🛡️ [Maintenance & Backup Guide](docs/MAINTENANCE_AND_BACKUP_GUIDE.md)
+- 📊 [Data Classification & Inventory](docs/DATA_INVENTORY.md)
 
-Errors share one shape: `{ timestamp, status, error, message, fieldErrors?, path }`.
+---
 
-## 8. Testing with Postman
+## 7. License & Internship Attributions
 
-Import `postman/SkillSphere.postman_collection.json`. Run **0. Get CSRF token** first, then the numbered requests in
-order. Postman's cookie jar keeps `JSESSIONID` and `XSRF-TOKEN`; if a POST returns 403, re-run request 0.
-
-### curl equivalent
-
-```bash
-# 1) get CSRF cookie + token
-curl -s -c jar.txt http://localhost:8080/api/auth/csrf
-TOKEN=$(grep XSRF-TOKEN jar.txt | awk '{print $7}')
-
-# 2) register
-curl -s -b jar.txt -c jar.txt -X POST http://localhost:8080/api/auth/register \
-  -H "Content-Type: application/json" -H "X-XSRF-TOKEN: $TOKEN" \
-  -d '{"fullName":"Jordan Rivera","email":"jordan@example.com","password":"Str0ng!Passw0rd","confirmPassword":"Str0ng!Passw0rd"}'
-
-# 3) login, then call /me
-curl -s -b jar.txt -c jar.txt -X POST http://localhost:8080/api/auth/login \
-  -H "Content-Type: application/json" -H "X-XSRF-TOKEN: $TOKEN" \
-  -d '{"email":"jordan@example.com","password":"Str0ng!Passw0rd","rememberMe":false}'
-curl -s -b jar.txt http://localhost:8080/api/auth/me
-```
-
-## 8. Troubleshooting
-
-- **`Could not resolve placeholder 'DB_PASSWORD'`** — create `backend/.env` (see step 3).
-- **`password authentication failed`** — `DB_USERNAME`/`DB_PASSWORD` do not match your PostgreSQL user.
-- **Browser shows "Cannot reach the server"** — backend not running, or `CORS_ALLOWED_ORIGINS` does not match the
-  address in your browser bar (use `localhost`, not `127.0.0.1`, on both sides).
-- **403 on every POST** — the XSRF cookie is missing; make sure the frontend and API are both on `localhost`.
-
-## 9. Extending
-
-Add new feature modules as sibling packages next to `controller/ service/ repository/ entity/` and protect their
-endpoints with `@PreAuthorize`. Skill-gap data (skills, proficiency, learning paths) can reference `users.id`.
+Developed by **Jayanth G** as part of the **Infosys Springboard Virtual Internship 7.0**.  
+© 2026 SkillSphere Project. All rights reserved.

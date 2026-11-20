@@ -1,0 +1,1127 @@
+Table "assessment_assignments" {
+  "id" bigint [pk, not null]
+  "assessment_id" bigint [not null]
+  "user_id" bigint [not null]
+  "assigned_by_id" bigint [not null]
+  "due_date" date
+  "status" "character varying(20)" [not null, default: `'PENDING'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((status)::text = ANY ((ARRAY['PENDING'::character varying, 'COMPLETED'::character varying, 'OVERDUE'::character varying])::text[]))` [name: 'assessment_assignments_status_check']
+  }
+}
+
+Table "assessment_attempts" {
+  "id" bigint [pk, not null]
+  "user_id" bigint [not null]
+  "skill_id" bigint [not null]
+  "assessment_id" bigint
+  "assignment_id" bigint
+  "target_level" "character varying(30)" [not null, default: `'Intermediate'::charactervarying`]
+  "current_level" "character varying(30)" [default: `'Unaware'::charactervarying`]
+  "status" "character varying(20)" [not null, default: `'IN_PROGRESS'::charactervarying`]
+  "generation_source" "character varying(30)" [not null, default: `'FALLBACK'::charactervarying`]
+  "generation_status" "character varying(30)" [not null, default: `'SUCCESS'::charactervarying`]
+  "generation_error" text
+  "score" integer
+  "passed" boolean
+  "correct_answers" integer
+  "total_questions" integer [not null, default: 0]
+  "answers_json" text
+  "started_at" timestamp [not null, default: `now()`]
+  "completed_at" timestamp
+
+  Checks {
+    `((generation_source)::text = ANY ((ARRAY['AI_GENERATED'::character varying, 'FALLBACK'::character varying])::text[]))` [name: 'assessment_attempts_generation_source_check']
+    `((generation_status)::text = ANY ((ARRAY['SUCCESS'::character varying, 'FALLBACK_TRIGGERED'::character varying, 'FAILED'::character varying])::text[]))` [name: 'assessment_attempts_generation_status_check']
+    `((status)::text = ANY ((ARRAY['IN_PROGRESS'::character varying, 'COMPLETED'::character varying, 'ABANDONED'::character varying, 'EXPIRED'::character varying])::text[]))` [name: 'assessment_attempts_status_check']
+  }
+
+  Indexes {
+    skill_id [type: btree, name: "idx_assessment_attempts_skill"]
+    user_id [type: btree, name: "idx_assessment_attempts_user"]
+    (user_id, skill_id, started_at [desc]) [type: btree, name: "idx_assessment_attempts_user_skill"]
+    (user_id, status) [type: btree, name: "idx_assessment_attempts_user_status"]
+  }
+}
+
+Table "assessment_questions" {
+  "id" bigint [pk, not null]
+  "assessment_id" bigint [not null]
+  "skill_id" bigint [not null]
+  "question_text" text [not null]
+  "options_json" text [not null]
+  "correct_answer_index" integer [not null]
+  "points" integer [not null, default: 1]
+  "attempt_id" bigint
+  "difficulty" "character varying(20)" [not null, default: `'MEDIUM'::charactervarying`]
+  "subtopic" "character varying(100)"
+  "explanation" text
+  "question_order" integer [not null, default: 0]
+
+  Indexes {
+    attempt_id [type: btree, name: "idx_assessment_questions_attempt"]
+    (skill_id, difficulty) [type: btree, name: "idx_assessment_questions_skill_diff"]
+  }
+}
+
+Table "assessment_responses" {
+  "id" bigint [pk, not null]
+  "submission_id" bigint [not null]
+  "question_id" bigint [not null]
+  "selected_option_index" integer [not null]
+  "is_correct" boolean [not null]
+}
+
+Table "assessment_submissions" {
+  "id" bigint [pk, not null]
+  "assessment_id" bigint [not null]
+  "user_id" bigint [not null]
+  "assignment_id" bigint
+  "score" integer [not null]
+  "passed" boolean [not null, default: false]
+  "completed_at" timestamp [not null, default: `now()`]
+  "attempt_id" bigint
+  "generation_source" "character varying(30)" [not null, default: `'FALLBACK'::charactervarying`]
+  "target_level" "character varying(30)"
+  "skill_id" bigint
+}
+
+Table "audit_logs" {
+  "id" bigint [pk, not null]
+  "user_id" bigint
+  "action" "character varying(100)" [not null]
+  "entity_name" "character varying(100)" [not null]
+  "entity_id" "character varying(100)"
+  "details" text
+  "ip_address" "character varying(45)"
+  "created_at" timestamp [not null, default: `now()`]
+}
+
+Table "calendar_events" {
+  "id" bigint [pk, not null]
+  "creator_id" bigint [not null]
+  "title" "character varying(140)" [not null]
+  "description" text
+  "event_type" "character varying(20)" [not null]
+  "start_time" timestamp [not null]
+  "end_time" timestamp [not null]
+  "location_or_link" "character varying(500)"
+  "reference_id" bigint
+  "created_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((event_type)::text = ANY ((ARRAY['ASSESSMENT'::character varying, 'MENTORSHIP'::character varying, 'LEARNING'::character varying, 'TRAINING'::character varying, 'TEAM'::character varying])::text[]))` [name: 'calendar_events_event_type_check']
+  }
+}
+
+Table "certificates" {
+  "id" bigint [pk, not null]
+  "user_id" bigint [not null]
+  "course_id" bigint [not null]
+  "certificate_code" "character varying(80)" [unique, not null]
+  "title" "character varying(140)" [not null]
+  "issue_date" date [not null, default: `CURRENT_DATE`]
+  "expiry_date" date
+  "credential_url" "character varying(500)"
+  "created_at" timestamp [not null, default: `now()`]
+}
+
+Table "conversation_participants" {
+  "id" bigint [pk, not null]
+  "conversation_id" bigint [not null]
+  "user_id" bigint [not null]
+  "joined_at" timestamp [not null, default: `now()`]
+  "last_read_at" timestamp
+  "is_muted" boolean [not null, default: false]
+  "is_archived" boolean [not null, default: false]
+
+  Indexes {
+    (conversation_id, user_id) [unique, name: "uq_conv_user"]
+  }
+}
+
+Table "conversations" {
+  "id" bigint [pk, not null]
+  "type" "character varying(20)" [not null, default: `'DIRECT'::charactervarying`]
+  "title" "character varying(140)"
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+  "team_id" bigint
+
+  Checks {
+    `((type)::text = ANY ((ARRAY['DIRECT'::character varying, 'TEAM'::character varying])::text[]))` [name: 'conversations_type_check']
+  }
+
+  Indexes {
+    team_id [type: btree, name: "idx_conversations_team"]
+  }
+}
+
+Table "courses" {
+  "id" bigint [pk, not null]
+  "title" "character varying(140)" [not null]
+  "description" text
+  "skill_id" bigint
+  "level" "character varying(20)" [not null]
+  "duration_hours" integer [not null, default: 10]
+  "provider" "character varying(80)" [not null, default: `'SkillSphere Academy'::charactervarying`]
+  "course_url" "character varying(500)"
+  "thumbnail_url" "character varying(500)"
+  "created_at" timestamp [not null, default: `now()`]
+  "is_active" boolean [not null, default: true]
+
+  Checks {
+    `((level)::text = ANY ((ARRAY['Beginner'::character varying, 'Intermediate'::character varying, 'Advanced'::character varying])::text[]))` [name: 'courses_level_check']
+  }
+}
+
+Table "departments" {
+  "id" bigint [pk, not null]
+  "name" "character varying(100)" [unique, not null]
+  "code" "character varying(20)" [unique, not null]
+  "description" text
+  "head_user_id" bigint
+  "created_at" timestamp [not null, default: `now()`]
+}
+
+Table "discussion_replies" {
+  "id" bigint [pk, not null]
+  "thread_id" bigint [not null]
+  "author_id" bigint [not null]
+  "content" text [not null]
+  "is_accepted_answer" boolean [not null, default: false]
+  "created_at" timestamp [not null, default: `now()`]
+}
+
+Table "discussion_threads" {
+  "id" bigint [pk, not null]
+  "author_id" bigint [not null]
+  "title" "character varying(140)" [not null]
+  "content" text [not null]
+  "category" "character varying(80)"
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+  "reply_count" integer [not null, default: 0]
+}
+
+Table "employee_learning" {
+  "id" bigint [pk, not null]
+  "user_id" bigint [not null]
+  "course_id" bigint [not null]
+  "status" "character varying(30)" [not null, default: `'NOT_STARTED'::charactervarying`]
+  "progress_pct" integer [not null, default: 0]
+  "enrolled_at" timestamp [not null, default: `now()`]
+  "completed_at" timestamp
+  "expires_at" timestamp
+
+  Checks {
+    `((status)::text = ANY ((ARRAY['NOT_STARTED'::character varying, 'IN_PROGRESS'::character varying, 'COMPLETED'::character varying, 'CERTIFIED'::character varying, 'EXPIRED'::character varying])::text[]))` [name: 'employee_learning_status_check']
+  }
+
+  Indexes {
+    (user_id, course_id) [unique, name: "uq_user_course"]
+  }
+}
+
+Table "employee_profiles" {
+  "id" bigint [pk, not null]
+  "user_id" bigint [unique, not null]
+  "job_role" "character varying(80)" [not null, default: `'Software Developer'::charactervarying`]
+  "department" "character varying(80)"
+  "experience_level" "character varying(40)" [not null, default: `'Entry level'::charactervarying`]
+  "bio" text
+  "skills" text
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((experience_level)::text = ANY ((ARRAY['Entry level'::character varying, 'Intermediate'::character varying, 'Experienced'::character varying])::text[]))` [name: 'chk_profile_experience']
+    `((job_role)::text = ANY ((ARRAY['Software Developer'::character varying, 'Data Analyst'::character varying, 'QA Engineer'::character varying, 'Support Engineer'::character varying])::text[]))` [name: 'chk_profile_job_role']
+  }
+
+  Indexes {
+    job_role [type: btree, name: "idx_employee_profiles_job_role"]
+    user_id [type: btree, name: "idx_employee_profiles_user"]
+  }
+}
+
+Table "employee_skills" {
+  "id" bigint [pk, not null]
+  "user_id" bigint [not null]
+  "skill_id" bigint [not null]
+  "proficiency_level" "character varying(20)" [not null]
+  "verified" boolean [not null, default: false]
+  "verified_by_id" bigint
+  "updated_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((proficiency_level)::text = ANY ((ARRAY['Unaware'::character varying, 'Beginner'::character varying, 'Intermediate'::character varying, 'Advanced'::character varying, 'Expert'::character varying])::text[]))` [name: 'employee_skills_proficiency_level_check']
+  }
+
+  Indexes {
+    (user_id, skill_id) [unique, name: "uq_user_skill"]
+  }
+}
+
+Table "event_participants" {
+  "id" bigint [pk, not null]
+  "event_id" bigint [not null]
+  "user_id" bigint [not null]
+  "status" "character varying(20)" [not null, default: `'INVITED'::charactervarying`]
+
+  Checks {
+    `((status)::text = ANY ((ARRAY['INVITED'::character varying, 'ACCEPTED'::character varying, 'DECLINED'::character varying])::text[]))` [name: 'event_participants_status_check']
+  }
+
+  Indexes {
+    (event_id, user_id) [unique, name: "uq_event_user"]
+  }
+}
+
+Table "flyway_schema_history" {
+  "installed_rank" integer [pk, not null]
+  "version" "character varying(50)"
+  "description" "character varying(200)" [not null]
+  "type" "character varying(20)" [not null]
+  "script" "character varying(1000)" [not null]
+  "checksum" integer
+  "installed_by" "character varying(100)" [not null]
+  "installed_on" timestamp [not null, default: `now()`]
+  "execution_time" integer [not null]
+  "success" boolean [not null]
+
+  Indexes {
+    success [type: btree, name: "flyway_schema_history_s_idx"]
+  }
+}
+
+Table "goal_action_items" {
+  "id" bigint [pk, not null]
+  "goal_id" bigint [not null]
+  "title" "character varying(200)" [not null]
+  "description" text
+  "is_completed" boolean [not null, default: false]
+  "due_date" date
+  "completed_at" timestamp
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+
+  Indexes {
+    goal_id [type: btree, name: "idx_goal_action_items_goal"]
+  }
+}
+
+Table "hr_announcement_reads" {
+  "id" bigint [pk, not null]
+  "announcement_id" bigint [not null]
+  "user_id" bigint [not null]
+  "read_at" timestamp [not null, default: `now()`]
+
+  Indexes {
+    (announcement_id, user_id) [unique, name: "uq_announcement_user"]
+    user_id [type: btree, name: "idx_hr_announcement_reads_user"]
+  }
+}
+
+Table "hr_announcements" {
+  "id" bigint [pk, not null]
+  "author_id" bigint [not null]
+  "target_type" "character varying(30)" [not null, default: `'ORGANIZATION'::charactervarying`]
+  "department_id" bigint
+  "target_role" "character varying(80)"
+  "title" "character varying(200)" [not null]
+  "content" text [not null]
+  "priority" "character varying(20)" [not null, default: `'NORMAL'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((priority)::text = ANY ((ARRAY['NORMAL'::character varying, 'HIGH'::character varying, 'URGENT'::character varying])::text[]))` [name: 'hr_announcements_priority_check']
+    `((target_type)::text = ANY ((ARRAY['ORGANIZATION'::character varying, 'DEPARTMENT'::character varying, 'ROLE'::character varying])::text[]))` [name: 'hr_announcements_target_type_check']
+  }
+
+  Indexes {
+    author_id [type: btree, name: "idx_hr_announcements_author"]
+    department_id [type: btree, name: "idx_hr_announcements_dept"]
+  }
+}
+
+Table "knowledge_articles" {
+  "id" bigint [pk, not null]
+  "category_id" bigint
+  "author_id" bigint [not null]
+  "title" "character varying(140)" [not null]
+  "content" text [not null]
+  "tags" "character varying(200)"
+  "status" "character varying(20)" [not null, default: `'PUBLISHED'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((status)::text = ANY ((ARRAY['DRAFT'::character varying, 'PUBLISHED'::character varying, 'ARCHIVED'::character varying])::text[]))` [name: 'knowledge_articles_status_check']
+  }
+}
+
+Table "knowledge_categories" {
+  "id" bigint [pk, not null]
+  "name" "character varying(80)" [unique, not null]
+  "description" text
+}
+
+Table "leadership_report_shares" {
+  "id" bigint [pk, not null]
+  "report_type" "character varying(60)" [not null]
+  "title" "character varying(200)" [not null]
+  "shared_by_id" bigint [not null]
+  "shared_with_role" "character varying(30)" [not null]
+  "department_id" bigint
+  "summary_notes" text
+  "report_data_json" text
+  "created_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((shared_with_role)::text = ANY ((ARRAY['MANAGER'::character varying, 'DEPARTMENT_HEAD'::character varying, 'ALL_LEADERSHIP'::character varying])::text[]))` [name: 'leadership_report_shares_shared_with_role_check']
+  }
+
+  Indexes {
+    department_id [type: btree, name: "idx_report_shares_dept"]
+    shared_with_role [type: btree, name: "idx_report_shares_role"]
+  }
+}
+
+Table "learning_path_items" {
+  "id" bigint [pk, not null]
+  "learning_path_id" bigint [not null]
+  "course_id" bigint [not null]
+  "step_order" integer [not null]
+
+  Indexes {
+    (learning_path_id, course_id) [unique, name: "uq_path_course"]
+  }
+}
+
+Table "learning_paths" {
+  "id" bigint [pk, not null]
+  "title" "character varying(140)" [not null]
+  "description" text
+  "target_role" "character varying(80)"
+  "created_by_id" bigint
+  "created_at" timestamp [not null, default: `now()`]
+  "is_active" boolean [not null, default: true]
+  "skill_id" bigint
+  "difficulty_level" "character varying(30)" [default: `'Beginner'::charactervarying`]
+}
+
+Table "manager_course_recommendations" {
+  "id" bigint [pk, not null]
+  "manager_id" bigint [not null]
+  "employee_id" bigint [not null]
+  "course_id" bigint [not null]
+  "skill_id" bigint
+  "reason" text [not null]
+  "status" "character varying(20)" [not null, default: `'RECOMMENDED'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((status)::text = ANY ((ARRAY['RECOMMENDED'::character varying, 'ENROLLED'::character varying, 'DISMISSED'::character varying])::text[]))` [name: 'chk_mgr_rec_status']
+  }
+
+  Indexes {
+    employee_id [type: btree, name: "idx_mgr_rec_employee"]
+    manager_id [type: btree, name: "idx_mgr_rec_manager"]
+  }
+}
+
+Table "mentee_skill_consents" {
+  "id" bigint [pk, not null]
+  "employee_id" bigint [not null]
+  "mentor_id" bigint [not null]
+  "can_view_skills" boolean [not null, default: true]
+  "can_view_gaps" boolean [not null, default: true]
+  "can_view_assessments" boolean [not null, default: true]
+  "consent_status" "character varying(20)" [not null, default: `'GRANTED'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((consent_status)::text = ANY ((ARRAY['GRANTED'::character varying, 'REVOKED'::character varying])::text[]))` [name: 'mentee_skill_consents_consent_status_check']
+  }
+
+  Indexes {
+    (employee_id, mentor_id) [unique, name: "uq_mentee_mentor_consent"]
+    employee_id [type: btree, name: "idx_mentee_consent_employee"]
+    mentor_id [type: btree, name: "idx_mentee_consent_mentor"]
+  }
+}
+
+Table "mentor_assignments" {
+  "id" bigint [pk, not null]
+  "mentor_id" bigint [not null]
+  "employee_id" bigint [not null]
+  "assigned_by_id" bigint [not null]
+  "status" "character varying(20)" [not null, default: `'ACTIVE'::charactervarying`]
+  "notes" text
+  "assigned_at" timestamp [not null, default: `now()`]
+  "ended_at" timestamp
+
+  Checks {
+    `(mentor_id <> employee_id)` [name: 'chk_no_self_mentoring']
+    `((status)::text = ANY ((ARRAY['ACTIVE'::character varying, 'COMPLETED'::character varying, 'TERMINATED'::character varying])::text[]))` [name: 'mentor_assignments_status_check']
+  }
+
+  Indexes {
+    employee_id [type: btree, name: "idx_mentor_assignments_employee"]
+    mentor_id [type: btree, name: "idx_mentor_assignments_mentor"]
+    employee_id [type: btree, unique, name: "uq_active_employee_mentor"]
+  }
+}
+
+Table "mentor_availability" {
+  "id" bigint [pk, not null]
+  "mentor_id" bigint [not null]
+  "day_of_week" "character varying(20)" [not null]
+  "start_time" time [not null]
+  "end_time" time [not null]
+  "session_format" "character varying(30)" [not null, default: `'VIRTUAL'::charactervarying`]
+  "is_available" boolean [not null, default: true]
+  "created_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `(end_time > start_time)` [name: 'chk_time_window']
+    `((day_of_week)::text = ANY ((ARRAY['MONDAY'::character varying, 'TUESDAY'::character varying, 'WEDNESDAY'::character varying, 'THURSDAY'::character varying, 'FRIDAY'::character varying, 'SATURDAY'::character varying, 'SUNDAY'::character varying])::text[]))` [name: 'mentor_availability_day_of_week_check']
+    `((session_format)::text = ANY ((ARRAY['VIRTUAL'::character varying, 'IN_PERSON'::character varying, 'HYBRID'::character varying])::text[]))` [name: 'mentor_availability_session_format_check']
+  }
+
+  Indexes {
+    mentor_id [type: btree, name: "idx_mentor_availability_mentor"]
+  }
+}
+
+Table "mentor_evaluations" {
+  "id" bigint [pk, not null]
+  "mentor_id" bigint [not null]
+  "employee_id" bigint [not null]
+  "session_id" bigint
+  "rating" integer [not null]
+  "strengths" text
+  "areas_for_growth" text
+  "comments" text [not null]
+  "created_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((rating >= 1) AND (rating <= 5))` [name: 'mentor_evaluations_rating_check']
+  }
+
+  Indexes {
+    employee_id [type: btree, name: "idx_mentor_evaluations_employee"]
+    mentor_id [type: btree, name: "idx_mentor_evaluations_mentor"]
+  }
+}
+
+Table "mentor_profiles" {
+  "id" bigint [pk, not null]
+  "user_id" bigint [unique, not null]
+  "headline" "character varying(140)" [not null]
+  "expertise_areas" text [not null]
+  "max_mentees" integer [not null, default: 3]
+  "is_active" boolean [not null, default: true]
+  "approved_by_id" bigint [not null]
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+  "preferred_format" "character varying(30)" [default: `'VIRTUAL'::charactervarying`]
+  "bio" text
+
+  Checks {
+    `(max_mentees > 0)` [name: 'mentor_profiles_max_mentees_check']
+  }
+
+  Indexes {
+    is_active [type: btree, name: "idx_mentor_profiles_active"]
+    user_id [type: btree, name: "idx_mentor_profiles_user"]
+  }
+}
+
+Table "mentorship_feedback" {
+  "id" bigint [pk, not null]
+  "session_id" bigint [unique, not null]
+  "author_id" bigint [not null]
+  "rating" integer [not null]
+  "comments" text [not null]
+  "created_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((rating >= 1) AND (rating <= 5))` [name: 'mentorship_feedback_rating_check']
+  }
+
+  Indexes {
+    author_id [type: btree, name: "idx_feedback_author"]
+  }
+}
+
+Table "mentorship_goals" {
+  "id" bigint [pk, not null]
+  "assignment_id" bigint [not null]
+  "title" "character varying(140)" [not null]
+  "description" text
+  "target_date" date
+  "status" "character varying(20)" [not null, default: `'IN_PROGRESS'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+  "priority" "character varying(20)" [default: `'MEDIUM'::charactervarying`]
+  "skill_id" bigint
+
+  Checks {
+    `((status)::text = ANY ((ARRAY['PROPOSED'::character varying, 'AGREED'::character varying, 'IN_PROGRESS'::character varying, 'ACHIEVED'::character varying, 'COMPLETED'::character varying, 'ON_HOLD'::character varying, 'ABANDONED'::character varying, 'CANCELLED'::character varying])::text[]))` [name: 'mentorship_goals_status_check']
+  }
+
+  Indexes {
+    assignment_id [type: btree, name: "idx_goals_assignment"]
+  }
+}
+
+Table "mentorship_requests" {
+  "id" bigint [pk, not null]
+  "mentor_id" bigint [not null]
+  "employee_id" bigint [not null]
+  "message" text
+  "status" "character varying(20)" [not null, default: `'PENDING'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+  "responded_at" timestamp
+  "response_note" text
+
+  Checks {
+    `((status)::text = ANY ((ARRAY['PENDING'::character varying, 'ACCEPTED'::character varying, 'DECLINED'::character varying, 'CANCELLED'::character varying])::text[]))` [name: 'mentorship_requests_status_check']
+  }
+
+  Indexes {
+    employee_id [type: btree, name: "idx_mentorship_requests_employee"]
+    mentor_id [type: btree, name: "idx_mentorship_requests_mentor"]
+  }
+}
+
+Table "mentorship_sessions" {
+  "id" bigint [pk, not null]
+  "assignment_id" bigint [not null]
+  "title" "character varying(140)" [not null]
+  "description" text
+  "scheduled_at" timestamp [not null]
+  "duration_minutes" integer [not null, default: 45]
+  "meeting_link" "character varying(500)"
+  "status" "character varying(20)" [not null, default: `'SCHEDULED'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+  "shared_notes" text
+  "mentor_prep_notes" text
+
+  Checks {
+    `(duration_minutes > 0)` [name: 'mentorship_sessions_duration_minutes_check']
+    `((status)::text = ANY ((ARRAY['SCHEDULED'::character varying, 'COMPLETED'::character varying, 'CANCELLED'::character varying])::text[]))` [name: 'mentorship_sessions_status_check']
+  }
+
+  Indexes {
+    assignment_id [type: btree, name: "idx_sessions_assignment"]
+    scheduled_at [type: btree, name: "idx_sessions_scheduled"]
+  }
+}
+
+Table "message_reports" {
+  "id" bigint [pk, not null]
+  "message_id" bigint [not null]
+  "reporter_id" bigint [not null]
+  "reason" "character varying(255)" [not null]
+  "details" text
+  "status" "character varying(30)" [not null, default: `'PENDING'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+
+  Indexes {
+    (message_id, reporter_id) [unique, name: "uq_msg_report"]
+    status [type: btree, name: "idx_msg_reports_status"]
+  }
+}
+
+Table "messages" {
+  "id" bigint [pk, not null]
+  "conversation_id" bigint [not null]
+  "sender_id" bigint [not null]
+  "content" text [not null]
+  "attachment_url" "character varying(500)"
+  "attachment_name" "character varying(140)"
+  "created_at" timestamp [not null, default: `now()`]
+
+  Indexes {
+    conversation_id [type: btree, name: "idx_messages_conversation"]
+    created_at [type: btree, name: "idx_messages_created"]
+  }
+}
+
+Table "notifications" {
+  "id" bigint [pk, not null]
+  "recipient_id" bigint [not null]
+  "type" "character varying(30)" [not null]
+  "title" "character varying(140)" [not null]
+  "message" text [not null]
+  "link" "character varying(250)"
+  "is_read" boolean [not null, default: false]
+  "created_at" timestamp [not null, default: `now()`]
+
+  Indexes {
+    recipient_id [type: btree, name: "idx_notifications_recipient"]
+  }
+}
+
+Table "password_reset_tokens" {
+  "id" bigint [pk, not null]
+  "user_id" bigint [not null]
+  "token_hash" "character varying(64)" [unique, not null]
+  "expires_at" timestamp [not null]
+  "used_at" timestamp
+  "created_at" timestamp [not null, default: `now()`]
+
+  Indexes {
+    user_id [type: btree, name: "idx_prt_user"]
+  }
+}
+
+Table "platform_feedback" {
+  "id" bigint [pk, not null]
+  "user_id" bigint
+  "category" "character varying(80)" [not null]
+  "rating" integer [not null]
+  "comments" text [not null]
+  "created_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((rating >= 1) AND (rating <= 5))` [name: 'platform_feedback_rating_check']
+  }
+}
+
+Table "reassessment_requests" {
+  "id" bigint [pk, not null]
+  "manager_id" bigint [not null]
+  "employee_id" bigint [not null]
+  "skill_id" bigint [not null]
+  "reason" text [not null]
+  "status" "character varying(20)" [not null, default: `'PENDING'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((status)::text = ANY ((ARRAY['PENDING'::character varying, 'COMPLETED'::character varying, 'CANCELLED'::character varying])::text[]))` [name: 'chk_reassessment_status']
+  }
+
+  Indexes {
+    employee_id [type: btree, name: "idx_reassessment_employee"]
+    manager_id [type: btree, name: "idx_reassessment_manager"]
+  }
+}
+
+Table "role_skill_requirements" {
+  "id" bigint [pk, not null]
+  "job_role" "character varying(80)" [not null]
+  "skill_id" bigint [not null]
+  "required_proficiency" "character varying(20)" [not null]
+  "priority" "character varying(20)" [not null, default: `'HIGH'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+  "is_active" boolean [not null, default: true]
+
+  Checks {
+    `((priority)::text = ANY ((ARRAY['HIGH'::character varying, 'MEDIUM'::character varying, 'LOW'::character varying])::text[]))` [name: 'role_skill_requirements_priority_check']
+    `((required_proficiency)::text = ANY ((ARRAY['Unaware'::character varying, 'Beginner'::character varying, 'Intermediate'::character varying, 'Advanced'::character varying, 'Expert'::character varying])::text[]))` [name: 'role_skill_requirements_required_proficiency_check']
+  }
+
+  Indexes {
+    (job_role, skill_id) [unique, name: "uq_role_skill"]
+  }
+}
+
+Table "shared_resources" {
+  "id" bigint [pk, not null]
+  "assignment_id" bigint [not null]
+  "title" "character varying(140)" [not null]
+  "url_or_content" text [not null]
+  "shared_by_id" bigint [not null]
+  "created_at" timestamp [not null, default: `now()`]
+  "resource_type" "character varying(30)" [default: `'ARTICLE'::charactervarying`]
+  "description" text
+  "skill_id" bigint
+}
+
+Table "skill_assessments" {
+  "id" bigint [pk, not null]
+  "title" "character varying(140)" [not null]
+  "description" text
+  "category_id" bigint
+  "target_role" "character varying(80)"
+  "pass_score" integer [not null, default: 70]
+  "time_limit_minutes" integer [not null, default: 30]
+  "created_at" timestamp [not null, default: `now()`]
+  "skill_id" bigint
+}
+
+Table "skill_categories" {
+  "id" bigint [pk, not null]
+  "name" "character varying(80)" [unique, not null]
+  "description" text
+  "created_at" timestamp [not null, default: `now()`]
+}
+
+Table "skill_evidence" {
+  "id" bigint [pk, not null]
+  "employee_skill_id" bigint [not null]
+  "title" "character varying(140)" [not null]
+  "description" text
+  "evidence_url" "character varying(500)"
+  "status" "character varying(20)" [not null, default: `'PENDING'::charactervarying`]
+  "reviewed_by_id" bigint
+  "created_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((status)::text = ANY ((ARRAY['PENDING'::character varying, 'APPROVED'::character varying, 'REJECTED'::character varying])::text[]))` [name: 'skill_evidence_status_check']
+  }
+}
+
+Table "skill_gaps" {
+  "id" bigint [pk, not null]
+  "user_id" bigint [not null]
+  "skill_id" bigint [not null]
+  "current_level" integer [not null]
+  "required_level" integer [not null]
+  "gap_size" integer [not null]
+  "priority" "character varying(20)" [not null]
+  "calculated_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((priority)::text = ANY ((ARRAY['HIGH'::character varying, 'MEDIUM'::character varying, 'LOW'::character varying, 'ON_TRACK'::character varying])::text[]))` [name: 'skill_gaps_priority_check']
+  }
+
+  Indexes {
+    (user_id, skill_id) [unique, name: "uq_user_skill_gap"]
+    user_id [type: btree, name: "idx_skill_gaps_user"]
+  }
+}
+
+Table "skills" {
+  "id" bigint [pk, not null]
+  "category_id" bigint [not null]
+  "name" "character varying(100)" [unique, not null]
+  "description" text
+  "created_at" timestamp [not null, default: `now()`]
+  "is_active" boolean [not null, default: true]
+}
+
+Table "support_tickets" {
+  "id" bigint [pk, not null]
+  "user_id" bigint [not null]
+  "subject" "character varying(140)" [not null]
+  "description" text [not null]
+  "priority" "character varying(20)" [not null, default: `'MEDIUM'::charactervarying`]
+  "status" "character varying(20)" [not null, default: `'OPEN'::charactervarying`]
+  "admin_notes" text
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((priority)::text = ANY ((ARRAY['LOW'::character varying, 'MEDIUM'::character varying, 'HIGH'::character varying])::text[]))` [name: 'support_tickets_priority_check']
+    `((status)::text = ANY ((ARRAY['OPEN'::character varying, 'IN_PROGRESS'::character varying, 'RESOLVED'::character varying, 'CLOSED'::character varying])::text[]))` [name: 'support_tickets_status_check']
+  }
+}
+
+Table "system_configuration" {
+  "config_key" "character varying(100)" [pk, not null]
+  "config_value" text [not null]
+  "description" text
+  "updated_at" timestamp [not null, default: `now()`]
+}
+
+Table "team_memberships" {
+  "id" bigint [pk, not null]
+  "team_id" bigint [not null]
+  "user_id" bigint [not null]
+  "joined_at" timestamp [not null, default: `now()`]
+  "role_in_team" "character varying(50)" [not null, default: `'MEMBER'::charactervarying`]
+
+  Indexes {
+    (team_id, user_id) [unique, name: "uq_team_user"]
+    user_id [type: btree, name: "idx_team_memberships_user"]
+  }
+}
+
+Table "teams" {
+  "id" bigint [pk, not null]
+  "department_id" bigint [not null]
+  "name" "character varying(100)" [not null]
+  "manager_user_id" bigint
+  "created_at" timestamp [not null, default: `now()`]
+
+  Indexes {
+    department_id [type: btree, name: "idx_teams_department"]
+  }
+}
+
+Table "training_enrollments" {
+  "id" bigint [pk, not null]
+  "programme_id" bigint [not null]
+  "user_id" bigint [not null]
+  "status" "character varying(20)" [not null, default: `'ENROLLED'::charactervarying`]
+  "enrolled_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((status)::text = ANY ((ARRAY['ENROLLED'::character varying, 'ATTENDED'::character varying, 'CANCELLED'::character varying])::text[]))` [name: 'training_enrollments_status_check']
+  }
+
+  Indexes {
+    (programme_id, user_id) [unique, name: "uq_programme_user"]
+  }
+}
+
+Table "training_programmes" {
+  "id" bigint [pk, not null]
+  "title" "character varying(140)" [not null]
+  "description" text
+  "department_id" bigint
+  "start_date" date [not null]
+  "end_date" date [not null]
+  "capacity" integer [not null, default: 30]
+  "trainer_name" "character varying(100)"
+  "status" "character varying(20)" [not null, default: `'UPCOMING'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+  "enrolled_count" integer [not null, default: 0]
+  "skill_id" bigint
+  "course_id" bigint
+
+  Checks {
+    `((status)::text = ANY ((ARRAY['UPCOMING'::character varying, 'ACTIVE'::character varying, 'COMPLETED'::character varying, 'CANCELLED'::character varying])::text[]))` [name: 'training_programmes_status_check']
+  }
+}
+
+Table "users" {
+  "id" bigint [pk, not null]
+  "full_name" "character varying(120)" [not null]
+  "email" "character varying(254)" [unique, not null]
+  "employee_id" "character varying(30)" [unique]
+  "password_hash" "character varying(100)" [not null]
+  "role" "character varying(20)" [not null, default: `'EMPLOYEE'::charactervarying`]
+  "requested_role" "character varying(20)"
+  "account_status" "character varying(20)" [not null, default: `'ACTIVE'::charactervarying`]
+  "created_at" timestamp [not null, default: `now()`]
+  "updated_at" timestamp [not null, default: `now()`]
+
+  Checks {
+    `((email)::text = lower((email)::text))` [name: 'chk_users_email_lc']
+    `((requested_role IS NULL) OR ((requested_role)::text = ANY ((ARRAY['EMPLOYEE'::character varying, 'MANAGER'::character varying, 'MENTOR'::character varying, 'HR_SPECIALIST'::character varying, 'DEPARTMENT_HEAD'::character varying, 'ADMIN'::character varying])::text[])))` [name: 'chk_users_req_role']
+    `((role)::text = ANY ((ARRAY['EMPLOYEE'::character varying, 'MANAGER'::character varying, 'MENTOR'::character varying, 'HR_SPECIALIST'::character varying, 'DEPARTMENT_HEAD'::character varying, 'ADMIN'::character varying])::text[]))` [name: 'chk_users_role']
+    `((account_status)::text = ANY ((ARRAY['ACTIVE'::character varying, 'PENDING'::character varying, 'SUSPENDED'::character varying])::text[]))` [name: 'chk_users_status']
+  }
+
+  Indexes {
+    role [type: btree, name: "idx_users_role"]
+  }
+}
+
+Ref "assessment_assignments_assessment_id_fkey":"skill_assessments"."id" <? "assessment_assignments"."assessment_id" [delete: cascade]
+
+Ref "assessment_assignments_assigned_by_id_fkey":"users"."id" <? "assessment_assignments"."assigned_by_id" [delete: restrict]
+
+Ref "assessment_assignments_user_id_fkey":"users"."id" <? "assessment_assignments"."user_id" [delete: cascade]
+
+Ref "assessment_attempts_assessment_id_fkey":"skill_assessments"."id" ?<? "assessment_attempts"."assessment_id" [delete: set null]
+
+Ref "assessment_attempts_assignment_id_fkey":"assessment_assignments"."id" ?<? "assessment_attempts"."assignment_id" [delete: set null]
+
+Ref "assessment_attempts_skill_id_fkey":"skills"."id" <? "assessment_attempts"."skill_id" [delete: cascade]
+
+Ref "assessment_attempts_user_id_fkey":"users"."id" <? "assessment_attempts"."user_id" [delete: cascade]
+
+Ref "assessment_questions_assessment_id_fkey":"skill_assessments"."id" <? "assessment_questions"."assessment_id" [delete: cascade]
+
+Ref "assessment_questions_attempt_id_fkey":"assessment_attempts"."id" ?<? "assessment_questions"."attempt_id" [delete: cascade]
+
+Ref "assessment_questions_skill_id_fkey":"skills"."id" <? "assessment_questions"."skill_id" [delete: cascade]
+
+Ref "assessment_responses_question_id_fkey":"assessment_questions"."id" <? "assessment_responses"."question_id" [delete: cascade]
+
+Ref "assessment_responses_submission_id_fkey":"assessment_submissions"."id" <? "assessment_responses"."submission_id" [delete: cascade]
+
+Ref "assessment_submissions_assessment_id_fkey":"skill_assessments"."id" <? "assessment_submissions"."assessment_id" [delete: cascade]
+
+Ref "assessment_submissions_assignment_id_fkey":"assessment_assignments"."id" ?<? "assessment_submissions"."assignment_id" [delete: set null]
+
+Ref "assessment_submissions_attempt_id_fkey":"assessment_attempts"."id" ?<? "assessment_submissions"."attempt_id" [delete: set null]
+
+Ref "assessment_submissions_skill_id_fkey":"skills"."id" ?<? "assessment_submissions"."skill_id" [delete: set null]
+
+Ref "assessment_submissions_user_id_fkey":"users"."id" <? "assessment_submissions"."user_id" [delete: cascade]
+
+Ref "audit_logs_user_id_fkey":"users"."id" ?<? "audit_logs"."user_id" [delete: set null]
+
+Ref "calendar_events_creator_id_fkey":"users"."id" <? "calendar_events"."creator_id" [delete: cascade]
+
+Ref "certificates_course_id_fkey":"courses"."id" <? "certificates"."course_id" [delete: cascade]
+
+Ref "certificates_user_id_fkey":"users"."id" <? "certificates"."user_id" [delete: cascade]
+
+Ref "conversation_participants_conversation_id_fkey":"conversations"."id" <? "conversation_participants"."conversation_id" [delete: cascade]
+
+Ref "conversation_participants_user_id_fkey":"users"."id" <? "conversation_participants"."user_id" [delete: cascade]
+
+Ref "conversations_team_id_fkey":"teams"."id" ?<? "conversations"."team_id" [delete: set null]
+
+Ref "courses_skill_id_fkey":"skills"."id" ?<? "courses"."skill_id" [delete: set null]
+
+Ref "departments_head_user_id_fkey":"users"."id" ?<? "departments"."head_user_id" [delete: set null]
+
+Ref "discussion_replies_author_id_fkey":"users"."id" <? "discussion_replies"."author_id" [delete: cascade]
+
+Ref "discussion_replies_thread_id_fkey":"discussion_threads"."id" <? "discussion_replies"."thread_id" [delete: cascade]
+
+Ref "discussion_threads_author_id_fkey":"users"."id" <? "discussion_threads"."author_id" [delete: cascade]
+
+Ref "employee_learning_course_id_fkey":"courses"."id" <? "employee_learning"."course_id" [delete: cascade]
+
+Ref "employee_learning_user_id_fkey":"users"."id" <? "employee_learning"."user_id" [delete: cascade]
+
+Ref "employee_profiles_user_id_fkey":"users"."id" <? "employee_profiles"."user_id" [delete: cascade]
+
+Ref "employee_skills_skill_id_fkey":"skills"."id" <? "employee_skills"."skill_id" [delete: cascade]
+
+Ref "employee_skills_user_id_fkey":"users"."id" <? "employee_skills"."user_id" [delete: cascade]
+
+Ref "employee_skills_verified_by_id_fkey":"users"."id" ?<? "employee_skills"."verified_by_id" [delete: set null]
+
+Ref "event_participants_event_id_fkey":"calendar_events"."id" <? "event_participants"."event_id" [delete: cascade]
+
+Ref "event_participants_user_id_fkey":"users"."id" <? "event_participants"."user_id" [delete: cascade]
+
+Ref "goal_action_items_goal_id_fkey":"mentorship_goals"."id" <? "goal_action_items"."goal_id" [delete: cascade]
+
+Ref "hr_announcement_reads_announcement_id_fkey":"hr_announcements"."id" <? "hr_announcement_reads"."announcement_id" [delete: cascade]
+
+Ref "hr_announcement_reads_user_id_fkey":"users"."id" <? "hr_announcement_reads"."user_id" [delete: cascade]
+
+Ref "hr_announcements_author_id_fkey":"users"."id" <? "hr_announcements"."author_id" [delete: cascade]
+
+Ref "hr_announcements_department_id_fkey":"departments"."id" ?<? "hr_announcements"."department_id" [delete: cascade]
+
+Ref "knowledge_articles_author_id_fkey":"users"."id" <? "knowledge_articles"."author_id" [delete: cascade]
+
+Ref "knowledge_articles_category_id_fkey":"knowledge_categories"."id" ?<? "knowledge_articles"."category_id" [delete: set null]
+
+Ref "leadership_report_shares_department_id_fkey":"departments"."id" ?<? "leadership_report_shares"."department_id" [delete: cascade]
+
+Ref "leadership_report_shares_shared_by_id_fkey":"users"."id" <? "leadership_report_shares"."shared_by_id" [delete: cascade]
+
+Ref "learning_path_items_course_id_fkey":"courses"."id" <? "learning_path_items"."course_id" [delete: cascade]
+
+Ref "learning_path_items_learning_path_id_fkey":"learning_paths"."id" <? "learning_path_items"."learning_path_id" [delete: cascade]
+
+Ref "learning_paths_created_by_id_fkey":"users"."id" ?<? "learning_paths"."created_by_id" [delete: set null]
+
+Ref "learning_paths_skill_id_fkey":"skills"."id" ?<? "learning_paths"."skill_id" [delete: set null]
+
+Ref "manager_course_recommendations_course_id_fkey":"courses"."id" <? "manager_course_recommendations"."course_id" [delete: cascade]
+
+Ref "manager_course_recommendations_employee_id_fkey":"users"."id" <? "manager_course_recommendations"."employee_id" [delete: cascade]
+
+Ref "manager_course_recommendations_manager_id_fkey":"users"."id" <? "manager_course_recommendations"."manager_id" [delete: cascade]
+
+Ref "manager_course_recommendations_skill_id_fkey":"skills"."id" ?<? "manager_course_recommendations"."skill_id" [delete: set null]
+
+Ref "mentee_skill_consents_employee_id_fkey":"users"."id" <? "mentee_skill_consents"."employee_id" [delete: cascade]
+
+Ref "mentee_skill_consents_mentor_id_fkey":"users"."id" <? "mentee_skill_consents"."mentor_id" [delete: cascade]
+
+Ref "mentor_assignments_assigned_by_id_fkey":"users"."id" <? "mentor_assignments"."assigned_by_id" [delete: restrict]
+
+Ref "mentor_assignments_employee_id_fkey":"users"."id" <? "mentor_assignments"."employee_id" [delete: cascade]
+
+Ref "mentor_assignments_mentor_id_fkey":"users"."id" <? "mentor_assignments"."mentor_id" [delete: cascade]
+
+Ref "mentor_availability_mentor_id_fkey":"users"."id" <? "mentor_availability"."mentor_id" [delete: cascade]
+
+Ref "mentor_evaluations_employee_id_fkey":"users"."id" <? "mentor_evaluations"."employee_id" [delete: cascade]
+
+Ref "mentor_evaluations_mentor_id_fkey":"users"."id" <? "mentor_evaluations"."mentor_id" [delete: cascade]
+
+Ref "mentor_evaluations_session_id_fkey":"mentorship_sessions"."id" ?<? "mentor_evaluations"."session_id" [delete: set null]
+
+Ref "mentor_profiles_approved_by_id_fkey":"users"."id" <? "mentor_profiles"."approved_by_id" [delete: restrict]
+
+Ref "mentor_profiles_user_id_fkey":"users"."id" <? "mentor_profiles"."user_id" [delete: cascade]
+
+Ref "mentorship_feedback_author_id_fkey":"users"."id" <? "mentorship_feedback"."author_id" [delete: cascade]
+
+Ref "mentorship_feedback_session_id_fkey":"mentorship_sessions"."id" <? "mentorship_feedback"."session_id" [delete: cascade]
+
+Ref "mentorship_goals_assignment_id_fkey":"mentor_assignments"."id" <? "mentorship_goals"."assignment_id" [delete: cascade]
+
+Ref "mentorship_goals_skill_id_fkey":"skills"."id" ?<? "mentorship_goals"."skill_id" [delete: set null]
+
+Ref "mentorship_requests_employee_id_fkey":"users"."id" <? "mentorship_requests"."employee_id" [delete: cascade]
+
+Ref "mentorship_requests_mentor_id_fkey":"users"."id" <? "mentorship_requests"."mentor_id" [delete: cascade]
+
+Ref "mentorship_sessions_assignment_id_fkey":"mentor_assignments"."id" <? "mentorship_sessions"."assignment_id" [delete: cascade]
+
+Ref "message_reports_message_id_fkey":"messages"."id" <? "message_reports"."message_id" [delete: cascade]
+
+Ref "message_reports_reporter_id_fkey":"users"."id" <? "message_reports"."reporter_id" [delete: cascade]
+
+Ref "messages_conversation_id_fkey":"conversations"."id" <? "messages"."conversation_id" [delete: cascade]
+
+Ref "messages_sender_id_fkey":"users"."id" <? "messages"."sender_id" [delete: cascade]
+
+Ref "notifications_recipient_id_fkey":"users"."id" <? "notifications"."recipient_id" [delete: cascade]
+
+Ref "password_reset_tokens_user_id_fkey":"users"."id" <? "password_reset_tokens"."user_id" [delete: cascade]
+
+Ref "platform_feedback_user_id_fkey":"users"."id" ?<? "platform_feedback"."user_id" [delete: set null]
+
+Ref "reassessment_requests_employee_id_fkey":"users"."id" <? "reassessment_requests"."employee_id" [delete: cascade]
+
+Ref "reassessment_requests_manager_id_fkey":"users"."id" <? "reassessment_requests"."manager_id" [delete: cascade]
+
+Ref "reassessment_requests_skill_id_fkey":"skills"."id" <? "reassessment_requests"."skill_id" [delete: cascade]
+
+Ref "role_skill_requirements_skill_id_fkey":"skills"."id" <? "role_skill_requirements"."skill_id" [delete: cascade]
+
+Ref "shared_resources_assignment_id_fkey":"mentor_assignments"."id" <? "shared_resources"."assignment_id" [delete: cascade]
+
+Ref "shared_resources_shared_by_id_fkey":"users"."id" <? "shared_resources"."shared_by_id" [delete: cascade]
+
+Ref "shared_resources_skill_id_fkey":"skills"."id" ?<? "shared_resources"."skill_id" [delete: set null]
+
+Ref "skill_assessments_category_id_fkey":"skill_categories"."id" ?<? "skill_assessments"."category_id" [delete: set null]
+
+Ref "skill_assessments_skill_id_fkey":"skills"."id" ?<? "skill_assessments"."skill_id" [delete: set null]
+
+Ref "skill_evidence_employee_skill_id_fkey":"employee_skills"."id" <? "skill_evidence"."employee_skill_id" [delete: cascade]
+
+Ref "skill_evidence_reviewed_by_id_fkey":"users"."id" ?<? "skill_evidence"."reviewed_by_id" [delete: set null]
+
+Ref "skill_gaps_skill_id_fkey":"skills"."id" <? "skill_gaps"."skill_id" [delete: cascade]
+
+Ref "skill_gaps_user_id_fkey":"users"."id" <? "skill_gaps"."user_id" [delete: cascade]
+
+Ref "skills_category_id_fkey":"skill_categories"."id" <? "skills"."category_id" [delete: cascade]
+
+Ref "support_tickets_user_id_fkey":"users"."id" <? "support_tickets"."user_id" [delete: cascade]
+
+Ref "team_memberships_team_id_fkey":"teams"."id" <? "team_memberships"."team_id" [delete: cascade]
+
+Ref "team_memberships_user_id_fkey":"users"."id" <? "team_memberships"."user_id" [delete: cascade]
+
+Ref "teams_department_id_fkey":"departments"."id" <? "teams"."department_id" [delete: cascade]
+
+Ref "teams_manager_user_id_fkey":"users"."id" ?<? "teams"."manager_user_id" [delete: set null]
+
+Ref "training_enrollments_programme_id_fkey":"training_programmes"."id" <? "training_enrollments"."programme_id" [delete: cascade]
+
+Ref "training_enrollments_user_id_fkey":"users"."id" <? "training_enrollments"."user_id" [delete: cascade]
+
+Ref "training_programmes_course_id_fkey":"courses"."id" ?<? "training_programmes"."course_id" [delete: set null]
+
+Ref "training_programmes_department_id_fkey":"departments"."id" ?<? "training_programmes"."department_id" [delete: set null]
+
+Ref "training_programmes_skill_id_fkey":"skills"."id" ?<? "training_programmes"."skill_id" [delete: set null]

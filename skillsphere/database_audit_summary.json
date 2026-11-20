@@ -1,0 +1,2211 @@
+{
+  "total_tables": 57,
+  "tables": [
+    "assessment_assignments",
+    "assessment_attempts",
+    "assessment_questions",
+    "assessment_responses",
+    "assessment_submissions",
+    "audit_logs",
+    "calendar_events",
+    "certificates",
+    "conversation_participants",
+    "conversations",
+    "courses",
+    "departments",
+    "discussion_replies",
+    "discussion_threads",
+    "employee_learning",
+    "employee_profiles",
+    "employee_skills",
+    "event_participants",
+    "flyway_schema_history",
+    "goal_action_items",
+    "hr_announcement_reads",
+    "hr_announcements",
+    "knowledge_articles",
+    "knowledge_categories",
+    "leadership_report_shares",
+    "learning_path_items",
+    "learning_paths",
+    "manager_course_recommendations",
+    "mentee_skill_consents",
+    "mentor_assignments",
+    "mentor_availability",
+    "mentor_evaluations",
+    "mentor_profiles",
+    "mentorship_feedback",
+    "mentorship_goals",
+    "mentorship_requests",
+    "mentorship_sessions",
+    "message_reports",
+    "messages",
+    "notifications",
+    "password_reset_tokens",
+    "platform_feedback",
+    "reassessment_requests",
+    "role_skill_requirements",
+    "shared_resources",
+    "skill_assessments",
+    "skill_categories",
+    "skill_evidence",
+    "skill_gaps",
+    "skills",
+    "support_tickets",
+    "system_configuration",
+    "team_memberships",
+    "teams",
+    "training_enrollments",
+    "training_programmes",
+    "users"
+  ],
+  "table_row_counts": {
+    "assessment_assignments": 0,
+    "assessment_attempts": 1,
+    "assessment_questions": 86,
+    "assessment_responses": 22,
+    "assessment_submissions": 2,
+    "audit_logs": 155,
+    "calendar_events": 0,
+    "certificates": 1,
+    "conversation_participants": 2,
+    "conversations": 1,
+    "courses": 24,
+    "departments": 14,
+    "discussion_replies": 0,
+    "discussion_threads": 0,
+    "employee_learning": 1,
+    "employee_profiles": 15,
+    "employee_skills": 6,
+    "event_participants": 0,
+    "flyway_schema_history": 11,
+    "goal_action_items": 0,
+    "hr_announcement_reads": 0,
+    "hr_announcements": 0,
+    "knowledge_articles": 0,
+    "knowledge_categories": 4,
+    "leadership_report_shares": 0,
+    "learning_path_items": 0,
+    "learning_paths": 0,
+    "manager_course_recommendations": 1,
+    "mentee_skill_consents": 1,
+    "mentor_assignments": 1,
+    "mentor_availability": 0,
+    "mentor_evaluations": 0,
+    "mentor_profiles": 12,
+    "mentorship_feedback": 0,
+    "mentorship_goals": 0,
+    "mentorship_requests": 2,
+    "mentorship_sessions": 0,
+    "message_reports": 0,
+    "messages": 1,
+    "notifications": 9,
+    "password_reset_tokens": 2,
+    "platform_feedback": 0,
+    "reassessment_requests": 0,
+    "role_skill_requirements": 14,
+    "shared_resources": 0,
+    "skill_assessments": 1,
+    "skill_categories": 5,
+    "skill_evidence": 0,
+    "skill_gaps": 8,
+    "skills": 18,
+    "support_tickets": 0,
+    "system_configuration": 4,
+    "team_memberships": 2,
+    "teams": 2,
+    "training_enrollments": 0,
+    "training_programmes": 0,
+    "users": 41
+  },
+  "foreign_keys": [
+    {
+      "from_table": "assessment_assignments",
+      "from_column": "assessment_id",
+      "to_table": "skill_assessments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "assessment_assignments_assessment_id_fkey"
+    },
+    {
+      "from_table": "assessment_assignments",
+      "from_column": "assigned_by_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "RESTRICT",
+      "constraint_name": "assessment_assignments_assigned_by_id_fkey"
+    },
+    {
+      "from_table": "assessment_assignments",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "assessment_assignments_user_id_fkey"
+    },
+    {
+      "from_table": "assessment_attempts",
+      "from_column": "assessment_id",
+      "to_table": "skill_assessments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "assessment_attempts_assessment_id_fkey"
+    },
+    {
+      "from_table": "assessment_attempts",
+      "from_column": "assignment_id",
+      "to_table": "assessment_assignments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "assessment_attempts_assignment_id_fkey"
+    },
+    {
+      "from_table": "assessment_attempts",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "assessment_attempts_skill_id_fkey"
+    },
+    {
+      "from_table": "assessment_attempts",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "assessment_attempts_user_id_fkey"
+    },
+    {
+      "from_table": "assessment_questions",
+      "from_column": "assessment_id",
+      "to_table": "skill_assessments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "assessment_questions_assessment_id_fkey"
+    },
+    {
+      "from_table": "assessment_questions",
+      "from_column": "attempt_id",
+      "to_table": "assessment_attempts",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "assessment_questions_attempt_id_fkey"
+    },
+    {
+      "from_table": "assessment_questions",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "assessment_questions_skill_id_fkey"
+    },
+    {
+      "from_table": "assessment_responses",
+      "from_column": "question_id",
+      "to_table": "assessment_questions",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "assessment_responses_question_id_fkey"
+    },
+    {
+      "from_table": "assessment_responses",
+      "from_column": "submission_id",
+      "to_table": "assessment_submissions",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "assessment_responses_submission_id_fkey"
+    },
+    {
+      "from_table": "assessment_submissions",
+      "from_column": "assessment_id",
+      "to_table": "skill_assessments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "assessment_submissions_assessment_id_fkey"
+    },
+    {
+      "from_table": "assessment_submissions",
+      "from_column": "assignment_id",
+      "to_table": "assessment_assignments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "assessment_submissions_assignment_id_fkey"
+    },
+    {
+      "from_table": "assessment_submissions",
+      "from_column": "attempt_id",
+      "to_table": "assessment_attempts",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "assessment_submissions_attempt_id_fkey"
+    },
+    {
+      "from_table": "assessment_submissions",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "assessment_submissions_skill_id_fkey"
+    },
+    {
+      "from_table": "assessment_submissions",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "assessment_submissions_user_id_fkey"
+    },
+    {
+      "from_table": "audit_logs",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "audit_logs_user_id_fkey"
+    },
+    {
+      "from_table": "calendar_events",
+      "from_column": "creator_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "calendar_events_creator_id_fkey"
+    },
+    {
+      "from_table": "certificates",
+      "from_column": "course_id",
+      "to_table": "courses",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "certificates_course_id_fkey"
+    },
+    {
+      "from_table": "certificates",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "certificates_user_id_fkey"
+    },
+    {
+      "from_table": "conversation_participants",
+      "from_column": "conversation_id",
+      "to_table": "conversations",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "conversation_participants_conversation_id_fkey"
+    },
+    {
+      "from_table": "conversation_participants",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "conversation_participants_user_id_fkey"
+    },
+    {
+      "from_table": "conversations",
+      "from_column": "team_id",
+      "to_table": "teams",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "conversations_team_id_fkey"
+    },
+    {
+      "from_table": "courses",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "courses_skill_id_fkey"
+    },
+    {
+      "from_table": "departments",
+      "from_column": "head_user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "departments_head_user_id_fkey"
+    },
+    {
+      "from_table": "discussion_replies",
+      "from_column": "author_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "discussion_replies_author_id_fkey"
+    },
+    {
+      "from_table": "discussion_replies",
+      "from_column": "thread_id",
+      "to_table": "discussion_threads",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "discussion_replies_thread_id_fkey"
+    },
+    {
+      "from_table": "discussion_threads",
+      "from_column": "author_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "discussion_threads_author_id_fkey"
+    },
+    {
+      "from_table": "employee_learning",
+      "from_column": "course_id",
+      "to_table": "courses",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "employee_learning_course_id_fkey"
+    },
+    {
+      "from_table": "employee_learning",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "employee_learning_user_id_fkey"
+    },
+    {
+      "from_table": "employee_profiles",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "employee_profiles_user_id_fkey"
+    },
+    {
+      "from_table": "employee_skills",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "employee_skills_skill_id_fkey"
+    },
+    {
+      "from_table": "employee_skills",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "employee_skills_user_id_fkey"
+    },
+    {
+      "from_table": "employee_skills",
+      "from_column": "verified_by_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "employee_skills_verified_by_id_fkey"
+    },
+    {
+      "from_table": "event_participants",
+      "from_column": "event_id",
+      "to_table": "calendar_events",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "event_participants_event_id_fkey"
+    },
+    {
+      "from_table": "event_participants",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "event_participants_user_id_fkey"
+    },
+    {
+      "from_table": "goal_action_items",
+      "from_column": "goal_id",
+      "to_table": "mentorship_goals",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "goal_action_items_goal_id_fkey"
+    },
+    {
+      "from_table": "hr_announcement_reads",
+      "from_column": "announcement_id",
+      "to_table": "hr_announcements",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "hr_announcement_reads_announcement_id_fkey"
+    },
+    {
+      "from_table": "hr_announcement_reads",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "hr_announcement_reads_user_id_fkey"
+    },
+    {
+      "from_table": "hr_announcements",
+      "from_column": "author_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "hr_announcements_author_id_fkey"
+    },
+    {
+      "from_table": "hr_announcements",
+      "from_column": "department_id",
+      "to_table": "departments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "hr_announcements_department_id_fkey"
+    },
+    {
+      "from_table": "knowledge_articles",
+      "from_column": "author_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "knowledge_articles_author_id_fkey"
+    },
+    {
+      "from_table": "knowledge_articles",
+      "from_column": "category_id",
+      "to_table": "knowledge_categories",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "knowledge_articles_category_id_fkey"
+    },
+    {
+      "from_table": "leadership_report_shares",
+      "from_column": "department_id",
+      "to_table": "departments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "leadership_report_shares_department_id_fkey"
+    },
+    {
+      "from_table": "leadership_report_shares",
+      "from_column": "shared_by_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "leadership_report_shares_shared_by_id_fkey"
+    },
+    {
+      "from_table": "learning_path_items",
+      "from_column": "course_id",
+      "to_table": "courses",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "learning_path_items_course_id_fkey"
+    },
+    {
+      "from_table": "learning_path_items",
+      "from_column": "learning_path_id",
+      "to_table": "learning_paths",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "learning_path_items_learning_path_id_fkey"
+    },
+    {
+      "from_table": "learning_paths",
+      "from_column": "created_by_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "learning_paths_created_by_id_fkey"
+    },
+    {
+      "from_table": "learning_paths",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "learning_paths_skill_id_fkey"
+    },
+    {
+      "from_table": "manager_course_recommendations",
+      "from_column": "course_id",
+      "to_table": "courses",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "manager_course_recommendations_course_id_fkey"
+    },
+    {
+      "from_table": "manager_course_recommendations",
+      "from_column": "employee_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "manager_course_recommendations_employee_id_fkey"
+    },
+    {
+      "from_table": "manager_course_recommendations",
+      "from_column": "manager_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "manager_course_recommendations_manager_id_fkey"
+    },
+    {
+      "from_table": "manager_course_recommendations",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "manager_course_recommendations_skill_id_fkey"
+    },
+    {
+      "from_table": "mentee_skill_consents",
+      "from_column": "employee_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentee_skill_consents_employee_id_fkey"
+    },
+    {
+      "from_table": "mentee_skill_consents",
+      "from_column": "mentor_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentee_skill_consents_mentor_id_fkey"
+    },
+    {
+      "from_table": "mentor_assignments",
+      "from_column": "assigned_by_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "RESTRICT",
+      "constraint_name": "mentor_assignments_assigned_by_id_fkey"
+    },
+    {
+      "from_table": "mentor_assignments",
+      "from_column": "employee_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentor_assignments_employee_id_fkey"
+    },
+    {
+      "from_table": "mentor_assignments",
+      "from_column": "mentor_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentor_assignments_mentor_id_fkey"
+    },
+    {
+      "from_table": "mentor_availability",
+      "from_column": "mentor_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentor_availability_mentor_id_fkey"
+    },
+    {
+      "from_table": "mentor_evaluations",
+      "from_column": "employee_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentor_evaluations_employee_id_fkey"
+    },
+    {
+      "from_table": "mentor_evaluations",
+      "from_column": "mentor_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentor_evaluations_mentor_id_fkey"
+    },
+    {
+      "from_table": "mentor_evaluations",
+      "from_column": "session_id",
+      "to_table": "mentorship_sessions",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "mentor_evaluations_session_id_fkey"
+    },
+    {
+      "from_table": "mentor_profiles",
+      "from_column": "approved_by_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "RESTRICT",
+      "constraint_name": "mentor_profiles_approved_by_id_fkey"
+    },
+    {
+      "from_table": "mentor_profiles",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentor_profiles_user_id_fkey"
+    },
+    {
+      "from_table": "mentorship_feedback",
+      "from_column": "author_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentorship_feedback_author_id_fkey"
+    },
+    {
+      "from_table": "mentorship_feedback",
+      "from_column": "session_id",
+      "to_table": "mentorship_sessions",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentorship_feedback_session_id_fkey"
+    },
+    {
+      "from_table": "mentorship_goals",
+      "from_column": "assignment_id",
+      "to_table": "mentor_assignments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentorship_goals_assignment_id_fkey"
+    },
+    {
+      "from_table": "mentorship_goals",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "mentorship_goals_skill_id_fkey"
+    },
+    {
+      "from_table": "mentorship_requests",
+      "from_column": "employee_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentorship_requests_employee_id_fkey"
+    },
+    {
+      "from_table": "mentorship_requests",
+      "from_column": "mentor_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentorship_requests_mentor_id_fkey"
+    },
+    {
+      "from_table": "mentorship_sessions",
+      "from_column": "assignment_id",
+      "to_table": "mentor_assignments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "mentorship_sessions_assignment_id_fkey"
+    },
+    {
+      "from_table": "message_reports",
+      "from_column": "message_id",
+      "to_table": "messages",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "message_reports_message_id_fkey"
+    },
+    {
+      "from_table": "message_reports",
+      "from_column": "reporter_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "message_reports_reporter_id_fkey"
+    },
+    {
+      "from_table": "messages",
+      "from_column": "conversation_id",
+      "to_table": "conversations",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "messages_conversation_id_fkey"
+    },
+    {
+      "from_table": "messages",
+      "from_column": "sender_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "messages_sender_id_fkey"
+    },
+    {
+      "from_table": "notifications",
+      "from_column": "recipient_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "notifications_recipient_id_fkey"
+    },
+    {
+      "from_table": "password_reset_tokens",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "password_reset_tokens_user_id_fkey"
+    },
+    {
+      "from_table": "platform_feedback",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "platform_feedback_user_id_fkey"
+    },
+    {
+      "from_table": "reassessment_requests",
+      "from_column": "employee_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "reassessment_requests_employee_id_fkey"
+    },
+    {
+      "from_table": "reassessment_requests",
+      "from_column": "manager_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "reassessment_requests_manager_id_fkey"
+    },
+    {
+      "from_table": "reassessment_requests",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "reassessment_requests_skill_id_fkey"
+    },
+    {
+      "from_table": "role_skill_requirements",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "role_skill_requirements_skill_id_fkey"
+    },
+    {
+      "from_table": "shared_resources",
+      "from_column": "assignment_id",
+      "to_table": "mentor_assignments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "shared_resources_assignment_id_fkey"
+    },
+    {
+      "from_table": "shared_resources",
+      "from_column": "shared_by_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "shared_resources_shared_by_id_fkey"
+    },
+    {
+      "from_table": "shared_resources",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "shared_resources_skill_id_fkey"
+    },
+    {
+      "from_table": "skill_assessments",
+      "from_column": "category_id",
+      "to_table": "skill_categories",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "skill_assessments_category_id_fkey"
+    },
+    {
+      "from_table": "skill_assessments",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "skill_assessments_skill_id_fkey"
+    },
+    {
+      "from_table": "skill_evidence",
+      "from_column": "employee_skill_id",
+      "to_table": "employee_skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "skill_evidence_employee_skill_id_fkey"
+    },
+    {
+      "from_table": "skill_evidence",
+      "from_column": "reviewed_by_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "skill_evidence_reviewed_by_id_fkey"
+    },
+    {
+      "from_table": "skill_gaps",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "skill_gaps_skill_id_fkey"
+    },
+    {
+      "from_table": "skill_gaps",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "skill_gaps_user_id_fkey"
+    },
+    {
+      "from_table": "skills",
+      "from_column": "category_id",
+      "to_table": "skill_categories",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "skills_category_id_fkey"
+    },
+    {
+      "from_table": "support_tickets",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "support_tickets_user_id_fkey"
+    },
+    {
+      "from_table": "team_memberships",
+      "from_column": "team_id",
+      "to_table": "teams",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "team_memberships_team_id_fkey"
+    },
+    {
+      "from_table": "team_memberships",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "team_memberships_user_id_fkey"
+    },
+    {
+      "from_table": "teams",
+      "from_column": "department_id",
+      "to_table": "departments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "teams_department_id_fkey"
+    },
+    {
+      "from_table": "teams",
+      "from_column": "manager_user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "teams_manager_user_id_fkey"
+    },
+    {
+      "from_table": "training_enrollments",
+      "from_column": "programme_id",
+      "to_table": "training_programmes",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "training_enrollments_programme_id_fkey"
+    },
+    {
+      "from_table": "training_enrollments",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "CASCADE",
+      "constraint_name": "training_enrollments_user_id_fkey"
+    },
+    {
+      "from_table": "training_programmes",
+      "from_column": "course_id",
+      "to_table": "courses",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "training_programmes_course_id_fkey"
+    },
+    {
+      "from_table": "training_programmes",
+      "from_column": "department_id",
+      "to_table": "departments",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "training_programmes_department_id_fkey"
+    },
+    {
+      "from_table": "training_programmes",
+      "from_column": "skill_id",
+      "to_table": "skills",
+      "to_column": "id",
+      "update_rule": "NO ACTION",
+      "delete_rule": "SET NULL",
+      "constraint_name": "training_programmes_skill_id_fkey"
+    }
+  ],
+  "total_foreign_keys": 103,
+  "pk_and_unique_constraints": [
+    {
+      "table_name": "assessment_assignments",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "assessment_assignments_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "assessment_attempts",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "assessment_attempts_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "assessment_questions",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "assessment_questions_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "assessment_responses",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "assessment_responses_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "assessment_submissions",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "assessment_submissions_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "audit_logs",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "audit_logs_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "calendar_events",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "calendar_events_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "certificates",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "certificates_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "certificates",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "certificates_certificate_code_key",
+      "columns": "certificate_code"
+    },
+    {
+      "table_name": "conversation_participants",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "conversation_participants_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "conversation_participants",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_conv_user",
+      "columns": "conversation_id, user_id"
+    },
+    {
+      "table_name": "conversations",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "conversations_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "courses",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "courses_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "departments",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "departments_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "departments",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "departments_code_key",
+      "columns": "code"
+    },
+    {
+      "table_name": "departments",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "departments_name_key",
+      "columns": "name"
+    },
+    {
+      "table_name": "discussion_replies",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "discussion_replies_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "discussion_threads",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "discussion_threads_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "employee_learning",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "employee_learning_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "employee_learning",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_user_course",
+      "columns": "user_id, course_id"
+    },
+    {
+      "table_name": "employee_profiles",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "employee_profiles_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "employee_profiles",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "employee_profiles_user_id_key",
+      "columns": "user_id"
+    },
+    {
+      "table_name": "employee_skills",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "employee_skills_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "employee_skills",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_user_skill",
+      "columns": "user_id, skill_id"
+    },
+    {
+      "table_name": "event_participants",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "event_participants_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "event_participants",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_event_user",
+      "columns": "event_id, user_id"
+    },
+    {
+      "table_name": "flyway_schema_history",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "flyway_schema_history_pk",
+      "columns": "installed_rank"
+    },
+    {
+      "table_name": "goal_action_items",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "goal_action_items_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "hr_announcement_reads",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "hr_announcement_reads_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "hr_announcement_reads",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_announcement_user",
+      "columns": "announcement_id, user_id"
+    },
+    {
+      "table_name": "hr_announcements",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "hr_announcements_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "knowledge_articles",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "knowledge_articles_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "knowledge_categories",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "knowledge_categories_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "knowledge_categories",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "knowledge_categories_name_key",
+      "columns": "name"
+    },
+    {
+      "table_name": "leadership_report_shares",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "leadership_report_shares_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "learning_path_items",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "learning_path_items_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "learning_path_items",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_path_course",
+      "columns": "learning_path_id, course_id"
+    },
+    {
+      "table_name": "learning_paths",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "learning_paths_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "manager_course_recommendations",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "manager_course_recommendations_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "mentee_skill_consents",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "mentee_skill_consents_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "mentee_skill_consents",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_mentee_mentor_consent",
+      "columns": "employee_id, mentor_id"
+    },
+    {
+      "table_name": "mentor_assignments",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "mentor_assignments_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "mentor_availability",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "mentor_availability_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "mentor_evaluations",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "mentor_evaluations_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "mentor_profiles",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "mentor_profiles_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "mentor_profiles",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "mentor_profiles_user_id_key",
+      "columns": "user_id"
+    },
+    {
+      "table_name": "mentorship_feedback",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "mentorship_feedback_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "mentorship_feedback",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "mentorship_feedback_session_id_key",
+      "columns": "session_id"
+    },
+    {
+      "table_name": "mentorship_goals",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "mentorship_goals_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "mentorship_requests",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "mentorship_requests_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "mentorship_sessions",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "mentorship_sessions_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "message_reports",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "message_reports_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "message_reports",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_msg_report",
+      "columns": "message_id, reporter_id"
+    },
+    {
+      "table_name": "messages",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "messages_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "notifications",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "notifications_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "password_reset_tokens",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "password_reset_tokens_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "password_reset_tokens",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_prt_token_hash",
+      "columns": "token_hash"
+    },
+    {
+      "table_name": "platform_feedback",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "platform_feedback_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "reassessment_requests",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "reassessment_requests_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "role_skill_requirements",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "role_skill_requirements_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "role_skill_requirements",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_role_skill",
+      "columns": "job_role, skill_id"
+    },
+    {
+      "table_name": "shared_resources",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "shared_resources_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "skill_assessments",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "skill_assessments_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "skill_categories",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "skill_categories_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "skill_categories",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "skill_categories_name_key",
+      "columns": "name"
+    },
+    {
+      "table_name": "skill_evidence",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "skill_evidence_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "skill_gaps",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "skill_gaps_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "skill_gaps",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_user_skill_gap",
+      "columns": "user_id, skill_id"
+    },
+    {
+      "table_name": "skills",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "skills_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "skills",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "skills_name_key",
+      "columns": "name"
+    },
+    {
+      "table_name": "support_tickets",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "support_tickets_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "system_configuration",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "system_configuration_pkey",
+      "columns": "config_key"
+    },
+    {
+      "table_name": "team_memberships",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "team_memberships_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "team_memberships",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_team_user",
+      "columns": "team_id, user_id"
+    },
+    {
+      "table_name": "teams",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "teams_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "training_enrollments",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "training_enrollments_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "training_enrollments",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_programme_user",
+      "columns": "programme_id, user_id"
+    },
+    {
+      "table_name": "training_programmes",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "training_programmes_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "users",
+      "constraint_type": "PRIMARY KEY",
+      "constraint_name": "users_pkey",
+      "columns": "id"
+    },
+    {
+      "table_name": "users",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_users_email",
+      "columns": "email"
+    },
+    {
+      "table_name": "users",
+      "constraint_type": "UNIQUE",
+      "constraint_name": "uq_users_employee_id",
+      "columns": "employee_id"
+    }
+  ],
+  "indexes": [
+    {
+      "tablename": "assessment_assignments",
+      "indexname": "assessment_assignments_pkey",
+      "indexdef": "CREATE UNIQUE INDEX assessment_assignments_pkey ON public.assessment_assignments USING btree (id)"
+    },
+    {
+      "tablename": "assessment_attempts",
+      "indexname": "assessment_attempts_pkey",
+      "indexdef": "CREATE UNIQUE INDEX assessment_attempts_pkey ON public.assessment_attempts USING btree (id)"
+    },
+    {
+      "tablename": "assessment_attempts",
+      "indexname": "idx_assessment_attempts_skill",
+      "indexdef": "CREATE INDEX idx_assessment_attempts_skill ON public.assessment_attempts USING btree (skill_id)"
+    },
+    {
+      "tablename": "assessment_attempts",
+      "indexname": "idx_assessment_attempts_user",
+      "indexdef": "CREATE INDEX idx_assessment_attempts_user ON public.assessment_attempts USING btree (user_id)"
+    },
+    {
+      "tablename": "assessment_attempts",
+      "indexname": "idx_assessment_attempts_user_skill",
+      "indexdef": "CREATE INDEX idx_assessment_attempts_user_skill ON public.assessment_attempts USING btree (user_id, skill_id, started_at DESC)"
+    },
+    {
+      "tablename": "assessment_attempts",
+      "indexname": "idx_assessment_attempts_user_status",
+      "indexdef": "CREATE INDEX idx_assessment_attempts_user_status ON public.assessment_attempts USING btree (user_id, status)"
+    },
+    {
+      "tablename": "assessment_questions",
+      "indexname": "assessment_questions_pkey",
+      "indexdef": "CREATE UNIQUE INDEX assessment_questions_pkey ON public.assessment_questions USING btree (id)"
+    },
+    {
+      "tablename": "assessment_questions",
+      "indexname": "idx_assessment_questions_attempt",
+      "indexdef": "CREATE INDEX idx_assessment_questions_attempt ON public.assessment_questions USING btree (attempt_id)"
+    },
+    {
+      "tablename": "assessment_questions",
+      "indexname": "idx_assessment_questions_skill_diff",
+      "indexdef": "CREATE INDEX idx_assessment_questions_skill_diff ON public.assessment_questions USING btree (skill_id, difficulty) WHERE (attempt_id IS NULL)"
+    },
+    {
+      "tablename": "assessment_responses",
+      "indexname": "assessment_responses_pkey",
+      "indexdef": "CREATE UNIQUE INDEX assessment_responses_pkey ON public.assessment_responses USING btree (id)"
+    },
+    {
+      "tablename": "assessment_submissions",
+      "indexname": "assessment_submissions_pkey",
+      "indexdef": "CREATE UNIQUE INDEX assessment_submissions_pkey ON public.assessment_submissions USING btree (id)"
+    },
+    {
+      "tablename": "audit_logs",
+      "indexname": "audit_logs_pkey",
+      "indexdef": "CREATE UNIQUE INDEX audit_logs_pkey ON public.audit_logs USING btree (id)"
+    },
+    {
+      "tablename": "calendar_events",
+      "indexname": "calendar_events_pkey",
+      "indexdef": "CREATE UNIQUE INDEX calendar_events_pkey ON public.calendar_events USING btree (id)"
+    },
+    {
+      "tablename": "certificates",
+      "indexname": "certificates_certificate_code_key",
+      "indexdef": "CREATE UNIQUE INDEX certificates_certificate_code_key ON public.certificates USING btree (certificate_code)"
+    },
+    {
+      "tablename": "certificates",
+      "indexname": "certificates_pkey",
+      "indexdef": "CREATE UNIQUE INDEX certificates_pkey ON public.certificates USING btree (id)"
+    },
+    {
+      "tablename": "conversation_participants",
+      "indexname": "conversation_participants_pkey",
+      "indexdef": "CREATE UNIQUE INDEX conversation_participants_pkey ON public.conversation_participants USING btree (id)"
+    },
+    {
+      "tablename": "conversation_participants",
+      "indexname": "uq_conv_user",
+      "indexdef": "CREATE UNIQUE INDEX uq_conv_user ON public.conversation_participants USING btree (conversation_id, user_id)"
+    },
+    {
+      "tablename": "conversations",
+      "indexname": "conversations_pkey",
+      "indexdef": "CREATE UNIQUE INDEX conversations_pkey ON public.conversations USING btree (id)"
+    },
+    {
+      "tablename": "conversations",
+      "indexname": "idx_conversations_team",
+      "indexdef": "CREATE INDEX idx_conversations_team ON public.conversations USING btree (team_id)"
+    },
+    {
+      "tablename": "courses",
+      "indexname": "courses_pkey",
+      "indexdef": "CREATE UNIQUE INDEX courses_pkey ON public.courses USING btree (id)"
+    },
+    {
+      "tablename": "departments",
+      "indexname": "departments_code_key",
+      "indexdef": "CREATE UNIQUE INDEX departments_code_key ON public.departments USING btree (code)"
+    },
+    {
+      "tablename": "departments",
+      "indexname": "departments_name_key",
+      "indexdef": "CREATE UNIQUE INDEX departments_name_key ON public.departments USING btree (name)"
+    },
+    {
+      "tablename": "departments",
+      "indexname": "departments_pkey",
+      "indexdef": "CREATE UNIQUE INDEX departments_pkey ON public.departments USING btree (id)"
+    },
+    {
+      "tablename": "discussion_replies",
+      "indexname": "discussion_replies_pkey",
+      "indexdef": "CREATE UNIQUE INDEX discussion_replies_pkey ON public.discussion_replies USING btree (id)"
+    },
+    {
+      "tablename": "discussion_threads",
+      "indexname": "discussion_threads_pkey",
+      "indexdef": "CREATE UNIQUE INDEX discussion_threads_pkey ON public.discussion_threads USING btree (id)"
+    },
+    {
+      "tablename": "employee_learning",
+      "indexname": "employee_learning_pkey",
+      "indexdef": "CREATE UNIQUE INDEX employee_learning_pkey ON public.employee_learning USING btree (id)"
+    },
+    {
+      "tablename": "employee_learning",
+      "indexname": "uq_user_course",
+      "indexdef": "CREATE UNIQUE INDEX uq_user_course ON public.employee_learning USING btree (user_id, course_id)"
+    },
+    {
+      "tablename": "employee_profiles",
+      "indexname": "employee_profiles_pkey",
+      "indexdef": "CREATE UNIQUE INDEX employee_profiles_pkey ON public.employee_profiles USING btree (id)"
+    },
+    {
+      "tablename": "employee_profiles",
+      "indexname": "employee_profiles_user_id_key",
+      "indexdef": "CREATE UNIQUE INDEX employee_profiles_user_id_key ON public.employee_profiles USING btree (user_id)"
+    },
+    {
+      "tablename": "employee_profiles",
+      "indexname": "idx_employee_profiles_job_role",
+      "indexdef": "CREATE INDEX idx_employee_profiles_job_role ON public.employee_profiles USING btree (job_role)"
+    },
+    {
+      "tablename": "employee_profiles",
+      "indexname": "idx_employee_profiles_user",
+      "indexdef": "CREATE INDEX idx_employee_profiles_user ON public.employee_profiles USING btree (user_id)"
+    },
+    {
+      "tablename": "employee_skills",
+      "indexname": "employee_skills_pkey",
+      "indexdef": "CREATE UNIQUE INDEX employee_skills_pkey ON public.employee_skills USING btree (id)"
+    },
+    {
+      "tablename": "employee_skills",
+      "indexname": "uq_user_skill",
+      "indexdef": "CREATE UNIQUE INDEX uq_user_skill ON public.employee_skills USING btree (user_id, skill_id)"
+    },
+    {
+      "tablename": "event_participants",
+      "indexname": "event_participants_pkey",
+      "indexdef": "CREATE UNIQUE INDEX event_participants_pkey ON public.event_participants USING btree (id)"
+    },
+    {
+      "tablename": "event_participants",
+      "indexname": "uq_event_user",
+      "indexdef": "CREATE UNIQUE INDEX uq_event_user ON public.event_participants USING btree (event_id, user_id)"
+    },
+    {
+      "tablename": "flyway_schema_history",
+      "indexname": "flyway_schema_history_pk",
+      "indexdef": "CREATE UNIQUE INDEX flyway_schema_history_pk ON public.flyway_schema_history USING btree (installed_rank)"
+    },
+    {
+      "tablename": "flyway_schema_history",
+      "indexname": "flyway_schema_history_s_idx",
+      "indexdef": "CREATE INDEX flyway_schema_history_s_idx ON public.flyway_schema_history USING btree (success)"
+    },
+    {
+      "tablename": "goal_action_items",
+      "indexname": "goal_action_items_pkey",
+      "indexdef": "CREATE UNIQUE INDEX goal_action_items_pkey ON public.goal_action_items USING btree (id)"
+    },
+    {
+      "tablename": "goal_action_items",
+      "indexname": "idx_goal_action_items_goal",
+      "indexdef": "CREATE INDEX idx_goal_action_items_goal ON public.goal_action_items USING btree (goal_id)"
+    },
+    {
+      "tablename": "hr_announcement_reads",
+      "indexname": "hr_announcement_reads_pkey",
+      "indexdef": "CREATE UNIQUE INDEX hr_announcement_reads_pkey ON public.hr_announcement_reads USING btree (id)"
+    },
+    {
+      "tablename": "hr_announcement_reads",
+      "indexname": "idx_hr_announcement_reads_user",
+      "indexdef": "CREATE INDEX idx_hr_announcement_reads_user ON public.hr_announcement_reads USING btree (user_id)"
+    },
+    {
+      "tablename": "hr_announcement_reads",
+      "indexname": "uq_announcement_user",
+      "indexdef": "CREATE UNIQUE INDEX uq_announcement_user ON public.hr_announcement_reads USING btree (announcement_id, user_id)"
+    },
+    {
+      "tablename": "hr_announcements",
+      "indexname": "hr_announcements_pkey",
+      "indexdef": "CREATE UNIQUE INDEX hr_announcements_pkey ON public.hr_announcements USING btree (id)"
+    },
+    {
+      "tablename": "hr_announcements",
+      "indexname": "idx_hr_announcements_author",
+      "indexdef": "CREATE INDEX idx_hr_announcements_author ON public.hr_announcements USING btree (author_id)"
+    },
+    {
+      "tablename": "hr_announcements",
+      "indexname": "idx_hr_announcements_dept",
+      "indexdef": "CREATE INDEX idx_hr_announcements_dept ON public.hr_announcements USING btree (department_id)"
+    },
+    {
+      "tablename": "knowledge_articles",
+      "indexname": "knowledge_articles_pkey",
+      "indexdef": "CREATE UNIQUE INDEX knowledge_articles_pkey ON public.knowledge_articles USING btree (id)"
+    },
+    {
+      "tablename": "knowledge_categories",
+      "indexname": "knowledge_categories_name_key",
+      "indexdef": "CREATE UNIQUE INDEX knowledge_categories_name_key ON public.knowledge_categories USING btree (name)"
+    },
+    {
+      "tablename": "knowledge_categories",
+      "indexname": "knowledge_categories_pkey",
+      "indexdef": "CREATE UNIQUE INDEX knowledge_categories_pkey ON public.knowledge_categories USING btree (id)"
+    },
+    {
+      "tablename": "leadership_report_shares",
+      "indexname": "idx_report_shares_dept",
+      "indexdef": "CREATE INDEX idx_report_shares_dept ON public.leadership_report_shares USING btree (department_id)"
+    },
+    {
+      "tablename": "leadership_report_shares",
+      "indexname": "idx_report_shares_role",
+      "indexdef": "CREATE INDEX idx_report_shares_role ON public.leadership_report_shares USING btree (shared_with_role)"
+    },
+    {
+      "tablename": "leadership_report_shares",
+      "indexname": "leadership_report_shares_pkey",
+      "indexdef": "CREATE UNIQUE INDEX leadership_report_shares_pkey ON public.leadership_report_shares USING btree (id)"
+    },
+    {
+      "tablename": "learning_path_items",
+      "indexname": "learning_path_items_pkey",
+      "indexdef": "CREATE UNIQUE INDEX learning_path_items_pkey ON public.learning_path_items USING btree (id)"
+    },
+    {
+      "tablename": "learning_path_items",
+      "indexname": "uq_path_course",
+      "indexdef": "CREATE UNIQUE INDEX uq_path_course ON public.learning_path_items USING btree (learning_path_id, course_id)"
+    },
+    {
+      "tablename": "learning_paths",
+      "indexname": "learning_paths_pkey",
+      "indexdef": "CREATE UNIQUE INDEX learning_paths_pkey ON public.learning_paths USING btree (id)"
+    },
+    {
+      "tablename": "manager_course_recommendations",
+      "indexname": "idx_mgr_rec_employee",
+      "indexdef": "CREATE INDEX idx_mgr_rec_employee ON public.manager_course_recommendations USING btree (employee_id)"
+    },
+    {
+      "tablename": "manager_course_recommendations",
+      "indexname": "idx_mgr_rec_manager",
+      "indexdef": "CREATE INDEX idx_mgr_rec_manager ON public.manager_course_recommendations USING btree (manager_id)"
+    },
+    {
+      "tablename": "manager_course_recommendations",
+      "indexname": "manager_course_recommendations_pkey",
+      "indexdef": "CREATE UNIQUE INDEX manager_course_recommendations_pkey ON public.manager_course_recommendations USING btree (id)"
+    },
+    {
+      "tablename": "mentee_skill_consents",
+      "indexname": "idx_mentee_consent_employee",
+      "indexdef": "CREATE INDEX idx_mentee_consent_employee ON public.mentee_skill_consents USING btree (employee_id)"
+    },
+    {
+      "tablename": "mentee_skill_consents",
+      "indexname": "idx_mentee_consent_mentor",
+      "indexdef": "CREATE INDEX idx_mentee_consent_mentor ON public.mentee_skill_consents USING btree (mentor_id)"
+    },
+    {
+      "tablename": "mentee_skill_consents",
+      "indexname": "mentee_skill_consents_pkey",
+      "indexdef": "CREATE UNIQUE INDEX mentee_skill_consents_pkey ON public.mentee_skill_consents USING btree (id)"
+    },
+    {
+      "tablename": "mentee_skill_consents",
+      "indexname": "uq_mentee_mentor_consent",
+      "indexdef": "CREATE UNIQUE INDEX uq_mentee_mentor_consent ON public.mentee_skill_consents USING btree (employee_id, mentor_id)"
+    },
+    {
+      "tablename": "mentor_assignments",
+      "indexname": "idx_mentor_assignments_employee",
+      "indexdef": "CREATE INDEX idx_mentor_assignments_employee ON public.mentor_assignments USING btree (employee_id)"
+    },
+    {
+      "tablename": "mentor_assignments",
+      "indexname": "idx_mentor_assignments_mentor",
+      "indexdef": "CREATE INDEX idx_mentor_assignments_mentor ON public.mentor_assignments USING btree (mentor_id)"
+    },
+    {
+      "tablename": "mentor_assignments",
+      "indexname": "mentor_assignments_pkey",
+      "indexdef": "CREATE UNIQUE INDEX mentor_assignments_pkey ON public.mentor_assignments USING btree (id)"
+    },
+    {
+      "tablename": "mentor_assignments",
+      "indexname": "uq_active_employee_mentor",
+      "indexdef": "CREATE UNIQUE INDEX uq_active_employee_mentor ON public.mentor_assignments USING btree (employee_id) WHERE ((status)::text = 'ACTIVE'::text)"
+    },
+    {
+      "tablename": "mentor_availability",
+      "indexname": "idx_mentor_availability_mentor",
+      "indexdef": "CREATE INDEX idx_mentor_availability_mentor ON public.mentor_availability USING btree (mentor_id)"
+    },
+    {
+      "tablename": "mentor_availability",
+      "indexname": "mentor_availability_pkey",
+      "indexdef": "CREATE UNIQUE INDEX mentor_availability_pkey ON public.mentor_availability USING btree (id)"
+    },
+    {
+      "tablename": "mentor_evaluations",
+      "indexname": "idx_mentor_evaluations_employee",
+      "indexdef": "CREATE INDEX idx_mentor_evaluations_employee ON public.mentor_evaluations USING btree (employee_id)"
+    },
+    {
+      "tablename": "mentor_evaluations",
+      "indexname": "idx_mentor_evaluations_mentor",
+      "indexdef": "CREATE INDEX idx_mentor_evaluations_mentor ON public.mentor_evaluations USING btree (mentor_id)"
+    },
+    {
+      "tablename": "mentor_evaluations",
+      "indexname": "mentor_evaluations_pkey",
+      "indexdef": "CREATE UNIQUE INDEX mentor_evaluations_pkey ON public.mentor_evaluations USING btree (id)"
+    },
+    {
+      "tablename": "mentor_profiles",
+      "indexname": "idx_mentor_profiles_active",
+      "indexdef": "CREATE INDEX idx_mentor_profiles_active ON public.mentor_profiles USING btree (is_active)"
+    },
+    {
+      "tablename": "mentor_profiles",
+      "indexname": "idx_mentor_profiles_user",
+      "indexdef": "CREATE INDEX idx_mentor_profiles_user ON public.mentor_profiles USING btree (user_id)"
+    },
+    {
+      "tablename": "mentor_profiles",
+      "indexname": "mentor_profiles_pkey",
+      "indexdef": "CREATE UNIQUE INDEX mentor_profiles_pkey ON public.mentor_profiles USING btree (id)"
+    },
+    {
+      "tablename": "mentor_profiles",
+      "indexname": "mentor_profiles_user_id_key",
+      "indexdef": "CREATE UNIQUE INDEX mentor_profiles_user_id_key ON public.mentor_profiles USING btree (user_id)"
+    },
+    {
+      "tablename": "mentorship_feedback",
+      "indexname": "idx_feedback_author",
+      "indexdef": "CREATE INDEX idx_feedback_author ON public.mentorship_feedback USING btree (author_id)"
+    },
+    {
+      "tablename": "mentorship_feedback",
+      "indexname": "mentorship_feedback_pkey",
+      "indexdef": "CREATE UNIQUE INDEX mentorship_feedback_pkey ON public.mentorship_feedback USING btree (id)"
+    },
+    {
+      "tablename": "mentorship_feedback",
+      "indexname": "mentorship_feedback_session_id_key",
+      "indexdef": "CREATE UNIQUE INDEX mentorship_feedback_session_id_key ON public.mentorship_feedback USING btree (session_id)"
+    },
+    {
+      "tablename": "mentorship_goals",
+      "indexname": "idx_goals_assignment",
+      "indexdef": "CREATE INDEX idx_goals_assignment ON public.mentorship_goals USING btree (assignment_id)"
+    },
+    {
+      "tablename": "mentorship_goals",
+      "indexname": "mentorship_goals_pkey",
+      "indexdef": "CREATE UNIQUE INDEX mentorship_goals_pkey ON public.mentorship_goals USING btree (id)"
+    },
+    {
+      "tablename": "mentorship_requests",
+      "indexname": "idx_mentorship_requests_employee",
+      "indexdef": "CREATE INDEX idx_mentorship_requests_employee ON public.mentorship_requests USING btree (employee_id)"
+    },
+    {
+      "tablename": "mentorship_requests",
+      "indexname": "idx_mentorship_requests_mentor",
+      "indexdef": "CREATE INDEX idx_mentorship_requests_mentor ON public.mentorship_requests USING btree (mentor_id)"
+    },
+    {
+      "tablename": "mentorship_requests",
+      "indexname": "mentorship_requests_pkey",
+      "indexdef": "CREATE UNIQUE INDEX mentorship_requests_pkey ON public.mentorship_requests USING btree (id)"
+    },
+    {
+      "tablename": "mentorship_sessions",
+      "indexname": "idx_sessions_assignment",
+      "indexdef": "CREATE INDEX idx_sessions_assignment ON public.mentorship_sessions USING btree (assignment_id)"
+    },
+    {
+      "tablename": "mentorship_sessions",
+      "indexname": "idx_sessions_scheduled",
+      "indexdef": "CREATE INDEX idx_sessions_scheduled ON public.mentorship_sessions USING btree (scheduled_at)"
+    },
+    {
+      "tablename": "mentorship_sessions",
+      "indexname": "mentorship_sessions_pkey",
+      "indexdef": "CREATE UNIQUE INDEX mentorship_sessions_pkey ON public.mentorship_sessions USING btree (id)"
+    },
+    {
+      "tablename": "message_reports",
+      "indexname": "idx_msg_reports_status",
+      "indexdef": "CREATE INDEX idx_msg_reports_status ON public.message_reports USING btree (status)"
+    },
+    {
+      "tablename": "message_reports",
+      "indexname": "message_reports_pkey",
+      "indexdef": "CREATE UNIQUE INDEX message_reports_pkey ON public.message_reports USING btree (id)"
+    },
+    {
+      "tablename": "message_reports",
+      "indexname": "uq_msg_report",
+      "indexdef": "CREATE UNIQUE INDEX uq_msg_report ON public.message_reports USING btree (message_id, reporter_id)"
+    },
+    {
+      "tablename": "messages",
+      "indexname": "idx_messages_conversation",
+      "indexdef": "CREATE INDEX idx_messages_conversation ON public.messages USING btree (conversation_id)"
+    },
+    {
+      "tablename": "messages",
+      "indexname": "idx_messages_created",
+      "indexdef": "CREATE INDEX idx_messages_created ON public.messages USING btree (created_at)"
+    },
+    {
+      "tablename": "messages",
+      "indexname": "messages_pkey",
+      "indexdef": "CREATE UNIQUE INDEX messages_pkey ON public.messages USING btree (id)"
+    },
+    {
+      "tablename": "notifications",
+      "indexname": "idx_notifications_recipient",
+      "indexdef": "CREATE INDEX idx_notifications_recipient ON public.notifications USING btree (recipient_id)"
+    },
+    {
+      "tablename": "notifications",
+      "indexname": "notifications_pkey",
+      "indexdef": "CREATE UNIQUE INDEX notifications_pkey ON public.notifications USING btree (id)"
+    },
+    {
+      "tablename": "password_reset_tokens",
+      "indexname": "idx_prt_user",
+      "indexdef": "CREATE INDEX idx_prt_user ON public.password_reset_tokens USING btree (user_id)"
+    },
+    {
+      "tablename": "password_reset_tokens",
+      "indexname": "password_reset_tokens_pkey",
+      "indexdef": "CREATE UNIQUE INDEX password_reset_tokens_pkey ON public.password_reset_tokens USING btree (id)"
+    },
+    {
+      "tablename": "password_reset_tokens",
+      "indexname": "uq_prt_token_hash",
+      "indexdef": "CREATE UNIQUE INDEX uq_prt_token_hash ON public.password_reset_tokens USING btree (token_hash)"
+    },
+    {
+      "tablename": "platform_feedback",
+      "indexname": "platform_feedback_pkey",
+      "indexdef": "CREATE UNIQUE INDEX platform_feedback_pkey ON public.platform_feedback USING btree (id)"
+    },
+    {
+      "tablename": "reassessment_requests",
+      "indexname": "idx_reassessment_employee",
+      "indexdef": "CREATE INDEX idx_reassessment_employee ON public.reassessment_requests USING btree (employee_id)"
+    },
+    {
+      "tablename": "reassessment_requests",
+      "indexname": "idx_reassessment_manager",
+      "indexdef": "CREATE INDEX idx_reassessment_manager ON public.reassessment_requests USING btree (manager_id)"
+    },
+    {
+      "tablename": "reassessment_requests",
+      "indexname": "reassessment_requests_pkey",
+      "indexdef": "CREATE UNIQUE INDEX reassessment_requests_pkey ON public.reassessment_requests USING btree (id)"
+    },
+    {
+      "tablename": "role_skill_requirements",
+      "indexname": "role_skill_requirements_pkey",
+      "indexdef": "CREATE UNIQUE INDEX role_skill_requirements_pkey ON public.role_skill_requirements USING btree (id)"
+    },
+    {
+      "tablename": "role_skill_requirements",
+      "indexname": "uq_role_skill",
+      "indexdef": "CREATE UNIQUE INDEX uq_role_skill ON public.role_skill_requirements USING btree (job_role, skill_id)"
+    },
+    {
+      "tablename": "shared_resources",
+      "indexname": "shared_resources_pkey",
+      "indexdef": "CREATE UNIQUE INDEX shared_resources_pkey ON public.shared_resources USING btree (id)"
+    },
+    {
+      "tablename": "skill_assessments",
+      "indexname": "skill_assessments_pkey",
+      "indexdef": "CREATE UNIQUE INDEX skill_assessments_pkey ON public.skill_assessments USING btree (id)"
+    },
+    {
+      "tablename": "skill_categories",
+      "indexname": "skill_categories_name_key",
+      "indexdef": "CREATE UNIQUE INDEX skill_categories_name_key ON public.skill_categories USING btree (name)"
+    },
+    {
+      "tablename": "skill_categories",
+      "indexname": "skill_categories_pkey",
+      "indexdef": "CREATE UNIQUE INDEX skill_categories_pkey ON public.skill_categories USING btree (id)"
+    },
+    {
+      "tablename": "skill_evidence",
+      "indexname": "skill_evidence_pkey",
+      "indexdef": "CREATE UNIQUE INDEX skill_evidence_pkey ON public.skill_evidence USING btree (id)"
+    },
+    {
+      "tablename": "skill_gaps",
+      "indexname": "idx_skill_gaps_user",
+      "indexdef": "CREATE INDEX idx_skill_gaps_user ON public.skill_gaps USING btree (user_id)"
+    },
+    {
+      "tablename": "skill_gaps",
+      "indexname": "skill_gaps_pkey",
+      "indexdef": "CREATE UNIQUE INDEX skill_gaps_pkey ON public.skill_gaps USING btree (id)"
+    },
+    {
+      "tablename": "skill_gaps",
+      "indexname": "uq_user_skill_gap",
+      "indexdef": "CREATE UNIQUE INDEX uq_user_skill_gap ON public.skill_gaps USING btree (user_id, skill_id)"
+    },
+    {
+      "tablename": "skills",
+      "indexname": "skills_name_key",
+      "indexdef": "CREATE UNIQUE INDEX skills_name_key ON public.skills USING btree (name)"
+    },
+    {
+      "tablename": "skills",
+      "indexname": "skills_pkey",
+      "indexdef": "CREATE UNIQUE INDEX skills_pkey ON public.skills USING btree (id)"
+    },
+    {
+      "tablename": "support_tickets",
+      "indexname": "support_tickets_pkey",
+      "indexdef": "CREATE UNIQUE INDEX support_tickets_pkey ON public.support_tickets USING btree (id)"
+    },
+    {
+      "tablename": "system_configuration",
+      "indexname": "system_configuration_pkey",
+      "indexdef": "CREATE UNIQUE INDEX system_configuration_pkey ON public.system_configuration USING btree (config_key)"
+    },
+    {
+      "tablename": "team_memberships",
+      "indexname": "idx_team_memberships_user",
+      "indexdef": "CREATE INDEX idx_team_memberships_user ON public.team_memberships USING btree (user_id)"
+    },
+    {
+      "tablename": "team_memberships",
+      "indexname": "team_memberships_pkey",
+      "indexdef": "CREATE UNIQUE INDEX team_memberships_pkey ON public.team_memberships USING btree (id)"
+    },
+    {
+      "tablename": "team_memberships",
+      "indexname": "uq_team_user",
+      "indexdef": "CREATE UNIQUE INDEX uq_team_user ON public.team_memberships USING btree (team_id, user_id)"
+    },
+    {
+      "tablename": "teams",
+      "indexname": "idx_teams_department",
+      "indexdef": "CREATE INDEX idx_teams_department ON public.teams USING btree (department_id)"
+    },
+    {
+      "tablename": "teams",
+      "indexname": "teams_pkey",
+      "indexdef": "CREATE UNIQUE INDEX teams_pkey ON public.teams USING btree (id)"
+    },
+    {
+      "tablename": "training_enrollments",
+      "indexname": "training_enrollments_pkey",
+      "indexdef": "CREATE UNIQUE INDEX training_enrollments_pkey ON public.training_enrollments USING btree (id)"
+    },
+    {
+      "tablename": "training_enrollments",
+      "indexname": "uq_programme_user",
+      "indexdef": "CREATE UNIQUE INDEX uq_programme_user ON public.training_enrollments USING btree (programme_id, user_id)"
+    },
+    {
+      "tablename": "training_programmes",
+      "indexname": "training_programmes_pkey",
+      "indexdef": "CREATE UNIQUE INDEX training_programmes_pkey ON public.training_programmes USING btree (id)"
+    },
+    {
+      "tablename": "users",
+      "indexname": "idx_users_role",
+      "indexdef": "CREATE INDEX idx_users_role ON public.users USING btree (role)"
+    },
+    {
+      "tablename": "users",
+      "indexname": "uq_users_email",
+      "indexdef": "CREATE UNIQUE INDEX uq_users_email ON public.users USING btree (email)"
+    },
+    {
+      "tablename": "users",
+      "indexname": "uq_users_employee_id",
+      "indexdef": "CREATE UNIQUE INDEX uq_users_employee_id ON public.users USING btree (employee_id)"
+    },
+    {
+      "tablename": "users",
+      "indexname": "users_pkey",
+      "indexdef": "CREATE UNIQUE INDEX users_pkey ON public.users USING btree (id)"
+    }
+  ],
+  "total_indexes": 126,
+  "orphan_checks": {
+    "employee_skills_orphans": 0,
+    "mentorship_requests_orphans": 0,
+    "training_enrollments_orphans": 0,
+    "team_memberships_orphans": 0,
+    "assessment_attempts_orphans": 0
+  },
+  "users_by_role": [
+    {
+      "role": "ADMIN",
+      "count": "1",
+      "active_count": "1"
+    },
+    {
+      "role": "DEPARTMENT_HEAD",
+      "count": "1",
+      "active_count": "1"
+    },
+    {
+      "role": "EMPLOYEE",
+      "count": "14",
+      "active_count": "14"
+    },
+    {
+      "role": "HR_SPECIALIST",
+      "count": "11",
+      "active_count": "11"
+    },
+    {
+      "role": "MANAGER",
+      "count": "2",
+      "active_count": "2"
+    },
+    {
+      "role": "MENTOR",
+      "count": "12",
+      "active_count": "12"
+    }
+  ]
+}

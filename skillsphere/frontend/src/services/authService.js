@@ -56,7 +56,15 @@ export const updateUserRole = (id, role) => api.patch(`/api/admin/users/${id}/ro
 export const updateUserStatus = (id, status) => api.patch(`/api/admin/users/${id}/status`, { status }).then((r) => r.data);
 
 /** Asks the backend (which calls Google Gemini) to recommend courses for an assessment result. */
-export const getAiRecommendations = (payload) =>
-  api.post("/api/ai/recommendations", payload, { timeout: 70000 }).then((r) => r.data);
+export const getAiRecommendations = (payload, config = {}) =>
+  api.post("/api/ai/recommendations", payload, { timeout: 70000, ...config }).then((r) => r.data);
 
-export const dashboardPath = (role) => `/dashboard/${String(role || "employee").toLowerCase()}`;
+export const dashboardPath = (role) => {
+  const r = String(role || "employee").toUpperCase();
+  if (r === "HR_SPECIALIST" || r === "HR") return "/dashboard/hr";
+  if (r === "DEPARTMENT_HEAD") return "/dashboard/department-head";
+  if (r === "MANAGER") return "/dashboard/manager";
+  if (r === "MENTOR") return "/dashboard/mentor";
+  if (r === "ADMIN") return "/dashboard/admin";
+  return "/dashboard/employee";
+};

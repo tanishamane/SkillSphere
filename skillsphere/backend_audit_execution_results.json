@@ -1,0 +1,1437 @@
+{
+  "timestamp": "2026-11-18T02:01:22Z",
+  "auth_tests": [
+    {
+      "test_name": "Valid Login - EMPLOYEE",
+      "status_code": 200,
+      "expected_code": 200,
+      "passed": true,
+      "role_returned": "EMPLOYEE"
+    },
+    {
+      "test_name": "Valid Login - MANAGER",
+      "status_code": 200,
+      "expected_code": 200,
+      "passed": true,
+      "role_returned": "MANAGER"
+    },
+    {
+      "test_name": "Valid Login - MENTOR",
+      "status_code": 200,
+      "expected_code": 200,
+      "passed": true,
+      "role_returned": "MENTOR"
+    },
+    {
+      "test_name": "Valid Login - HR_SPECIALIST",
+      "status_code": 200,
+      "expected_code": 200,
+      "passed": true,
+      "role_returned": "HR_SPECIALIST"
+    },
+    {
+      "test_name": "Valid Login - DEPARTMENT_HEAD",
+      "status_code": 200,
+      "expected_code": 200,
+      "passed": true,
+      "role_returned": "DEPARTMENT_HEAD"
+    },
+    {
+      "test_name": "Valid Login - ADMIN",
+      "status_code": 200,
+      "expected_code": 200,
+      "passed": true,
+      "role_returned": "ADMIN"
+    },
+    {
+      "test_name": "Invalid Password Login",
+      "status_code": 401,
+      "expected_code": 401,
+      "passed": true,
+      "response_sample": "{\"timestamp\":\"2026-11-18T02:01:24.993642700Z\",\"status\":401,\"error\":\"Unauthorized\",\"message\":\"Invalid email or password.\",\"path\":\"/api/auth/login\"}"
+    },
+    {
+      "test_name": "Nonexistent Email Login",
+      "status_code": 401,
+      "expected_code": 401,
+      "passed": true,
+      "response_sample": "{\"timestamp\":\"2026-11-18T02:01:25.374069200Z\",\"status\":401,\"error\":\"Unauthorized\",\"message\":\"Invalid email or password.\",\"path\":\"/api/auth/login\"}"
+    },
+    {
+      "test_name": "Missing Credentials Body",
+      "status_code": 400,
+      "expected_code": 400,
+      "passed": true,
+      "response_sample": "{\"timestamp\":\"2026-11-18T02:01:25.389196400Z\",\"status\":400,\"error\":\"Bad Request\",\"message\":\"Please correct the highlighted fields.\",\"fieldErrors\":{\"email\":\"Email is required.\",\"password\":\"Password is "
+    },
+    {
+      "test_name": "Unauthenticated Request to /api/skills/my",
+      "status_code": 401,
+      "expected_code": 401,
+      "passed": true,
+      "response_sample": "{\"timestamp\":\"2026-11-18T02:01:25.394131900Z\",\"status\":401,\"error\":\"Unauthorized\",\"message\":\"Please sign in to continue.\",\"path\":\"/api/skills/my\"}"
+    },
+    {
+      "test_name": "CSRF Missing Token on POST",
+      "status_code": 403,
+      "expected_code": 403,
+      "passed": true,
+      "response_sample": "{\"timestamp\":\"2026-11-18T02:01:25.398943400Z\",\"status\":403,\"error\":\"Forbidden\",\"message\":\"You do not have permission to access this resource.\",\"path\":\"/api/auth/login\"}"
+    },
+    {
+      "test_name": "Logout Revokes Session",
+      "status_code": 401,
+      "expected_code": 401,
+      "passed": true
+    }
+  ],
+  "rbac_matrix": [
+    {
+      "name": "Admin Dashboard Overview",
+      "endpoint": "/api/admin/dashboard/overview",
+      "allowed_roles": [
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 404,
+          "expected": 200,
+          "passed": false
+        }
+      }
+    },
+    {
+      "name": "Admin User List",
+      "endpoint": "/api/admin/users",
+      "allowed_roles": [
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        }
+      }
+    },
+    {
+      "name": "Admin Audit Logs",
+      "endpoint": "/api/admin/audit-logs",
+      "allowed_roles": [
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        }
+      }
+    },
+    {
+      "name": "HR Overview",
+      "endpoint": "/api/hr/overview",
+      "allowed_roles": [
+        "HR_SPECIALIST",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        }
+      }
+    },
+    {
+      "name": "HR Employee Directory",
+      "endpoint": "/api/hr/employees",
+      "allowed_roles": [
+        "HR_SPECIALIST",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        }
+      }
+    },
+    {
+      "name": "HR Competencies",
+      "endpoint": "/api/hr/competencies",
+      "allowed_roles": [
+        "HR_SPECIALIST",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        }
+      }
+    },
+    {
+      "name": "Department Head Overview",
+      "endpoint": "/api/department-head/overview",
+      "allowed_roles": [
+        "DEPARTMENT_HEAD",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 400,
+          "expected": 200,
+          "passed": false
+        }
+      }
+    },
+    {
+      "name": "Department Head Capability",
+      "endpoint": "/api/department-head/capability",
+      "allowed_roles": [
+        "DEPARTMENT_HEAD",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 400,
+          "expected": 200,
+          "passed": false
+        }
+      }
+    },
+    {
+      "name": "Department Head Skill Matrix",
+      "endpoint": "/api/department-head/skill-matrix",
+      "allowed_roles": [
+        "DEPARTMENT_HEAD",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 400,
+          "expected": 200,
+          "passed": false
+        }
+      }
+    },
+    {
+      "name": "Manager Dashboard Overview",
+      "endpoint": "/api/manager/dashboard",
+      "allowed_roles": [
+        "MANAGER",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 404,
+          "expected": 403,
+          "passed": false
+        },
+        "MANAGER": {
+          "status": 404,
+          "expected": 200,
+          "passed": false
+        },
+        "MENTOR": {
+          "status": 404,
+          "expected": 403,
+          "passed": false
+        },
+        "HR_SPECIALIST": {
+          "status": 404,
+          "expected": 403,
+          "passed": false
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 404,
+          "expected": 403,
+          "passed": false
+        },
+        "ADMIN": {
+          "status": 404,
+          "expected": 200,
+          "passed": false
+        }
+      }
+    },
+    {
+      "name": "Manager Teams",
+      "endpoint": "/api/manager/teams",
+      "allowed_roles": [
+        "MANAGER",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        }
+      }
+    },
+    {
+      "name": "Manager Skill Inventory",
+      "endpoint": "/api/manager/skills/inventory",
+      "allowed_roles": [
+        "MANAGER",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 404,
+          "expected": 403,
+          "passed": false
+        },
+        "MANAGER": {
+          "status": 404,
+          "expected": 200,
+          "passed": false
+        },
+        "MENTOR": {
+          "status": 404,
+          "expected": 403,
+          "passed": false
+        },
+        "HR_SPECIALIST": {
+          "status": 404,
+          "expected": 403,
+          "passed": false
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 404,
+          "expected": 403,
+          "passed": false
+        },
+        "ADMIN": {
+          "status": 404,
+          "expected": 200,
+          "passed": false
+        }
+      }
+    },
+    {
+      "name": "Mentor Overview",
+      "endpoint": "/api/mentor/overview",
+      "allowed_roles": [
+        "MENTOR",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        }
+      }
+    },
+    {
+      "name": "Mentor Mentees",
+      "endpoint": "/api/mentor/mentees",
+      "allowed_roles": [
+        "MENTOR",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        }
+      }
+    },
+    {
+      "name": "Mentor Sessions",
+      "endpoint": "/api/mentor/sessions",
+      "allowed_roles": [
+        "MENTOR",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        }
+      }
+    },
+    {
+      "name": "Employee Overview",
+      "endpoint": "/api/dashboard/employee/overview",
+      "allowed_roles": [
+        "EMPLOYEE",
+        "ADMIN"
+      ],
+      "roles_outcomes": {
+        "UNAUTHENTICATED": {
+          "status": 401,
+          "expected": 401,
+          "passed": true
+        },
+        "EMPLOYEE": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        },
+        "MANAGER": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "MENTOR": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "HR_SPECIALIST": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "DEPARTMENT_HEAD": {
+          "status": 403,
+          "expected": 403,
+          "passed": true
+        },
+        "ADMIN": {
+          "status": 200,
+          "expected": 200,
+          "passed": true
+        }
+      }
+    }
+  ],
+  "functional_tests": [
+    {
+      "name": "Get My Skills",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/skills/my",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Get Skill Categories",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/skills/categories",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 5
+    },
+    {
+      "name": "Get Skill Catalogue",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/skills/catalogue",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Get My Skill Gaps",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/skills/gaps",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Get Course Catalogue",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/learning/courses",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 24
+    },
+    {
+      "name": "Get My Enrolled Courses",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/learning/my",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "Get Learning Progress",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/learning/progress",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Get Assessments List",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/assessments",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 1
+    },
+    {
+      "name": "Get My Submissions",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/assessments/my-submissions",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "Get Mentors Directory",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/mentorship/mentors",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Get My Mentorship Requests",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/mentorship/my-requests",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Get Calendar Events",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/calendar/events",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "Get Notifications",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/notifications",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "Get Chat Conversations",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/chat/conversations",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "Get Knowledge Categories",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/knowledge/categories",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 4
+    },
+    {
+      "name": "Get Knowledge Articles",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/knowledge/articles",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "Get Employee Profile",
+      "role": "EMPLOYEE",
+      "method": "GET",
+      "path": "/api/employee/profile",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 11
+    },
+    {
+      "name": "AI Recommendations Fallback",
+      "role": "EMPLOYEE",
+      "method": "POST",
+      "path": "/api/ai/recommendations",
+      "status_code": 400,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Manager Dashboard",
+      "role": "MANAGER",
+      "method": "GET",
+      "path": "/api/manager/dashboard",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Manager Teams",
+      "role": "MANAGER",
+      "method": "GET",
+      "path": "/api/manager/teams",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 1
+    },
+    {
+      "name": "Manager Skill Inventory",
+      "role": "MANAGER",
+      "method": "GET",
+      "path": "/api/manager/skills/inventory",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Manager Skill Gaps",
+      "role": "MANAGER",
+      "method": "GET",
+      "path": "/api/manager/skills/gaps",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Manager Skill Heatmap",
+      "role": "MANAGER",
+      "method": "GET",
+      "path": "/api/manager/skills/heatmap",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Manager Assessment Review",
+      "role": "MANAGER",
+      "method": "GET",
+      "path": "/api/manager/assessments",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 1
+    },
+    {
+      "name": "Manager Learning Progress",
+      "role": "MANAGER",
+      "method": "GET",
+      "path": "/api/manager/learning/progress",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Manager Mentorship Status",
+      "role": "MANAGER",
+      "method": "GET",
+      "path": "/api/manager/mentorship/overview",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Manager Reports Summary",
+      "role": "MANAGER",
+      "method": "GET",
+      "path": "/api/manager/reports/summary",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Mentor Dashboard Overview",
+      "role": "MENTOR",
+      "method": "GET",
+      "path": "/api/mentor/overview",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 12
+    },
+    {
+      "name": "Mentor Profile",
+      "role": "MENTOR",
+      "method": "GET",
+      "path": "/api/mentor/profile",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 16
+    },
+    {
+      "name": "Mentor Requests",
+      "role": "MENTOR",
+      "method": "GET",
+      "path": "/api/mentor/requests",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 1
+    },
+    {
+      "name": "Mentor Mentees",
+      "role": "MENTOR",
+      "method": "GET",
+      "path": "/api/mentor/mentees",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "Mentor Sessions",
+      "role": "MENTOR",
+      "method": "GET",
+      "path": "/api/mentor/sessions",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "Mentor Resources",
+      "role": "MENTOR",
+      "method": "GET",
+      "path": "/api/mentor/resources",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "Mentor Feedback",
+      "role": "MENTOR",
+      "method": "GET",
+      "path": "/api/mentor/feedback",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 5
+    },
+    {
+      "name": "Mentor Knowledge Contributions",
+      "role": "MENTOR",
+      "method": "GET",
+      "path": "/api/mentor/contributions",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "HR Dashboard Overview",
+      "role": "HR_SPECIALIST",
+      "method": "GET",
+      "path": "/api/hr/overview",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 13
+    },
+    {
+      "name": "HR Employee Directory",
+      "role": "HR_SPECIALIST",
+      "method": "GET",
+      "path": "/api/hr/employees",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 41
+    },
+    {
+      "name": "HR Mentor Directory",
+      "role": "HR_SPECIALIST",
+      "method": "GET",
+      "path": "/api/hr/mentors",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 13
+    },
+    {
+      "name": "HR Competencies",
+      "role": "HR_SPECIALIST",
+      "method": "GET",
+      "path": "/api/hr/competencies",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 18
+    },
+    {
+      "name": "HR Role Requirements",
+      "role": "HR_SPECIALIST",
+      "method": "GET",
+      "path": "/api/hr/role-requirements",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 14
+    },
+    {
+      "name": "HR Org Skill Gaps",
+      "role": "HR_SPECIALIST",
+      "method": "GET",
+      "path": "/api/hr/skill-gaps",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "HR Learning Catalogue",
+      "role": "HR_SPECIALIST",
+      "method": "GET",
+      "path": "/api/hr/learning-catalogue",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "HR Learning Paths",
+      "role": "HR_SPECIALIST",
+      "method": "GET",
+      "path": "/api/hr/learning-paths",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "HR Training Programmes",
+      "role": "HR_SPECIALIST",
+      "method": "GET",
+      "path": "/api/hr/training-programmes",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "HR Learning Progress",
+      "role": "HR_SPECIALIST",
+      "method": "GET",
+      "path": "/api/hr/learning-progress",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 7
+    },
+    {
+      "name": "HR Reports",
+      "role": "HR_SPECIALIST",
+      "method": "GET",
+      "path": "/api/hr/reports",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "DH Overview",
+      "role": "DEPARTMENT_HEAD",
+      "method": "GET",
+      "path": "/api/department-head/overview",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 20
+    },
+    {
+      "name": "DH Department Teams",
+      "role": "DEPARTMENT_HEAD",
+      "method": "GET",
+      "path": "/api/department-head/department-overview",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "DH Capability",
+      "role": "DEPARTMENT_HEAD",
+      "method": "GET",
+      "path": "/api/department-head/capability",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 8
+    },
+    {
+      "name": "DH Skill Matrix",
+      "role": "DEPARTMENT_HEAD",
+      "method": "GET",
+      "path": "/api/department-head/skill-matrix",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 4
+    },
+    {
+      "name": "DH Gap Heatmap",
+      "role": "DEPARTMENT_HEAD",
+      "method": "GET",
+      "path": "/api/department-head/gap-heatmap",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "DH Risk Alerts",
+      "role": "DEPARTMENT_HEAD",
+      "method": "GET",
+      "path": "/api/department-head/risk-priority-alerts",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "DH Reports",
+      "role": "DEPARTMENT_HEAD",
+      "method": "GET",
+      "path": "/api/department-head/reports",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 7
+    },
+    {
+      "name": "DH Announcements",
+      "role": "DEPARTMENT_HEAD",
+      "method": "GET",
+      "path": "/api/department-head/announcements",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    },
+    {
+      "name": "Admin Executive Dashboard",
+      "role": "ADMIN",
+      "method": "GET",
+      "path": "/api/admin/dashboard/overview",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Admin User Management",
+      "role": "ADMIN",
+      "method": "GET",
+      "path": "/api/admin/users",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 41
+    },
+    {
+      "name": "Admin Roles & Permissions",
+      "role": "ADMIN",
+      "method": "GET",
+      "path": "/api/admin/roles",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Admin Depts & Teams",
+      "role": "ADMIN",
+      "method": "GET",
+      "path": "/api/admin/departments-teams",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Admin Skill Catalogue",
+      "role": "ADMIN",
+      "method": "GET",
+      "path": "/api/admin/skills",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Admin Communications",
+      "role": "ADMIN",
+      "method": "GET",
+      "path": "/api/admin/communications",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Admin Notifications",
+      "role": "ADMIN",
+      "method": "GET",
+      "path": "/api/admin/notification-settings",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 5
+    },
+    {
+      "name": "Admin Audit Logs",
+      "role": "ADMIN",
+      "method": "GET",
+      "path": "/api/admin/audit-logs",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 155
+    },
+    {
+      "name": "Admin Security Alerts",
+      "role": "ADMIN",
+      "method": "GET",
+      "path": "/api/admin/security/alerts",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Admin System Config",
+      "role": "ADMIN",
+      "method": "GET",
+      "path": "/api/admin/system-configuration",
+      "status_code": 404,
+      "passed": false,
+      "item_count": null
+    },
+    {
+      "name": "Admin Backups",
+      "role": "ADMIN",
+      "method": "GET",
+      "path": "/api/admin/backups",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 15
+    },
+    {
+      "name": "Admin Support Tickets",
+      "role": "ADMIN",
+      "method": "GET",
+      "path": "/api/admin/support-tickets",
+      "status_code": 200,
+      "passed": true,
+      "item_count": 0
+    }
+  ],
+  "validation_tests": [
+    {
+      "scenario": "Nonexistent User ID (404 expected)",
+      "endpoint": "/api/admin/users/99999999",
+      "status_code": 404,
+      "expected_code": 404,
+      "passed": true,
+      "response_sample": "{\"timestamp\":\"2026-11-18T02:01:26.350194500Z\",\"status\":404,\"error\":\"Not Found\",\"message\":\"The request could not be processed.\",\"path\":\"/api/admin/users/99999999\"}"
+    },
+    {
+      "scenario": "Type Mismatch on Path Variable (400 expected)",
+      "endpoint": "/api/learning/courses/invalid_string_id",
+      "status_code": 404,
+      "expected_code": 400,
+      "passed": false,
+      "response_sample": "{\"timestamp\":\"2026-11-18T02:01:26.353208800Z\",\"status\":404,\"error\":\"Not Found\",\"message\":\"The request could not be processed.\",\"path\":\"/api/learning/courses/invalid_string_id\"}"
+    },
+    {
+      "scenario": "Validation failure on Register (@Valid @RequestBody, 400 expected)",
+      "endpoint": "/api/auth/register",
+      "status_code": 400,
+      "expected_code": 400,
+      "passed": true,
+      "response_sample": "{\"timestamp\":\"2026-11-18T02:01:26.367295Z\",\"status\":400,\"error\":\"Bad Request\",\"message\":\"Please correct the highlighted fields.\",\"fieldErrors\":{\"fullName\":\"Full name is required.\",\"email\":\"Enter a val"
+    },
+    {
+      "scenario": "Nonexistent Course ID (404 expected)",
+      "endpoint": "/api/learning/courses/99999999",
+      "status_code": 404,
+      "expected_code": 404,
+      "passed": true,
+      "response_sample": "{\"timestamp\":\"2026-11-18T02:01:26.370293200Z\",\"status\":404,\"error\":\"Not Found\",\"message\":\"The request could not be processed.\",\"path\":\"/api/learning/courses/99999999\"}"
+    }
+  ]
+}
